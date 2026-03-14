@@ -10,10 +10,10 @@
     --card-foreground: 210 30% 10%;
     --popover: 0 0% 100%;
     --popover-foreground: 210 30% 10%;
-    --primary: 211 100% 30%;
+    --primary: 350 85% 42%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 210 40% 96%;
-    --secondary-foreground: 211 100% 30%;
+    --secondary: 0 30% 96%;
+    --secondary-foreground: 350 85% 42%;
     --muted: 210 40% 96%;
     --muted-foreground: 215 16% 47%;
     --accent: 134 61% 41%;
@@ -22,7 +22,7 @@
     --destructive-foreground: 0 0% 100%;
     --border: 214 32% 91%;
     --input: 214 32% 91%;
-    --ring: 211 100% 30%;
+    --ring: 350 85% 42%;
     --radius: 0.75rem;
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 240 5.3% 26.1%;
@@ -54,6 +54,6 @@ html {
   background: #f1f1f1;
 }
 ::-webkit-scrollbar-thumb {
-  background: #004A99;
+  background: #C8102E;
   border-radius: 3px;
 }

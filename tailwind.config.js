@@ -18,9 +18,9 @@ module.exports = {
     },
     extend: {
       colors: {
-        clinical: '#004A99',
-        'clinical-light': '#E8F0FE',
-        'clinical-dark': '#003370',
+        clinical: '#C8102E',
+        'clinical-light': '#FEF2F2',
+        'clinical-dark': '#A00D24',
         lifegreen: '#28A745',
         'lifegreen-light': '#E8F5E9',
         border: 'hsl(var(--border))',
