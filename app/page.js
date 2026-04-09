@@ -312,8 +312,8 @@ function HeroSection() {
             </h2>
 
             <p className="text-lg text-gray-500 leading-relaxed max-w-lg">
-              Trusted by <strong className="text-gray-700">5 Lakh+ patients</strong> across New Delhi.
-              40 years of clinical excellence under the direct supervision of Dr. Lalchandani.
+              Trusted by <strong className="text-gray-700">20 Lakh+ patients</strong> across New Delhi.
+              40 years of clinical excellence under the direct supervision of Dr A. Lalchandani.
             </p>
 
             <div className="grid grid-cols-3 gap-3 pt-2">
@@ -341,6 +341,13 @@ function HeroSection() {
                 </div>
               ))}
             </div>
+
+            <button
+              onClick={() => document.getElementById('prescription')?.scrollIntoView({ behavior: 'smooth' })}
+              className="inline-flex items-center gap-2 bg-white border-2 border-clinical text-clinical px-5 py-3 rounded-xl font-semibold hover:bg-clinical hover:text-white transition-all shadow-sm"
+            >
+              <Upload className="w-5 h-5" /> Upload Prescription
+            </button>
           </div>
 
           <div className="flex justify-center lg:justify-end">
@@ -489,7 +496,7 @@ function TestCatalog() {
     <section id="tests" className="py-16 bg-gray-50/50">
       <div className="container mx-auto px-4">
         <div className="text-center mb-10">
-          <Badge className="bg-red-100 text-clinical hover:bg-red-100 mb-3">Popular Tests</Badge>
+          <Badge className="bg-red-100 text-clinical hover:bg-red-100 mb-3">Book Now</Badge>
           <h2 className="text-3xl lg:text-4xl font-bold text-gray-900">Book a Diagnostic Test</h2>
           <p className="text-gray-500 mt-2 max-w-xl mx-auto">Choose from 500+ NABL accredited tests with home sample collection and reports in 6 hours</p>
         </div>
@@ -649,7 +656,7 @@ function HealthPackages() {
     <section id="packages" className="py-16 bg-white">
       <div className="container mx-auto px-4">
         <div className="text-center mb-10">
-          <Badge className="bg-green-100 text-lifegreen hover:bg-green-100 mb-3">Save More</Badge>
+          <Badge className="bg-green-100 text-lifegreen hover:bg-green-100 mb-3">Popular Tests</Badge>
           <h2 className="text-3xl lg:text-4xl font-bold text-gray-900">Health Checkup Packages</h2>
           <p className="text-gray-500 mt-2 max-w-xl mx-auto">Comprehensive health packages curated by our doctors. Save up to 50% compared to individual tests.</p>
         </div>
@@ -930,10 +937,10 @@ function WhyChooseUs() {
   const features = [
     { icon: Award, title: 'NABL Accredited', desc: 'Highest quality standards certified by National Accreditation Board for Testing and Calibration Laboratories.', color: 'bg-yellow-50 text-yellow-600' },
     { icon: Clock, title: 'Reports in 6 Hours', desc: 'Fast turnaround time with real-time tracking. Most reports delivered within 6 hours of sample collection.', color: 'bg-red-50 text-clinical' },
-    { icon: Stethoscope, title: 'Doctor Supervised', desc: 'Every report is verified and signed by qualified pathologists under Dr. Lalchandani\'s supervision.', color: 'bg-red-50 text-red-500' },
+    { icon: Stethoscope, title: 'Doctor Supervised', desc: 'Every report is verified and signed by qualified pathologists under Dr Lalchandani\'s supervision.', color: 'bg-red-50 text-red-500' },
     { icon: Truck, title: 'Free Home Collection', desc: 'Trained phlebotomists come to your doorstep. Free collection across all Delhi NCR locations.', color: 'bg-green-50 text-lifegreen' },
     { icon: Shield, title: 'Data Privacy (DPDP)', desc: 'Your health data is protected under DPDP Act 2023 with strict consent-based data processing.', color: 'bg-purple-50 text-purple-500' },
-    { icon: Users, title: '40 Years of Trust', desc: 'Serving 5 lakh+ patients since 1986. A legacy of accuracy, reliability, and patient care.', color: 'bg-orange-50 text-orange-500' },
+    { icon: Users, title: '40 Years of Trust', desc: 'Serving 20 lakh+ patients since 1986. A legacy of accuracy, reliability, and patient care.', color: 'bg-orange-50 text-orange-500' },
   ]
 
   return (
@@ -941,8 +948,8 @@ function WhyChooseUs() {
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
           <Badge className="bg-clinical/10 text-clinical hover:bg-clinical/10 mb-3">Why Choose Us</Badge>
-          <h2 className="text-3xl lg:text-4xl font-bold text-gray-900">The Dr. Lalchandani Labs Difference</h2>
-          <p className="text-gray-500 mt-2 max-w-xl mx-auto">Why 5 lakh+ patients trust us with their health diagnostics</p>
+          <h2 className="text-3xl lg:text-4xl font-bold text-gray-900">The Dr Lalchandani Labs Difference</h2>
+          <p className="text-gray-500 mt-2 max-w-xl mx-auto">Why 20 lakh+ patients trust us with their health diagnostics</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -966,11 +973,11 @@ function WhyChooseUs() {
 // ============ LOCATIONS ============
 function LocationsSection() {
   const centers = [
-    { name: 'Greater Kailash-1', address: 'M-12, GK-1 Main Market, New Delhi', timings: '7 AM - 9 PM' },
-    { name: 'Punjabi Bagh', address: 'Ring Road, Near Metro Station, New Delhi', timings: '7 AM - 8 PM' },
-    { name: 'Lajpat Nagar', address: 'Central Market, Lajpat Nagar II, New Delhi', timings: '7 AM - 9 PM' },
-    { name: 'Saket', address: 'J Block, Saket, Near Select City Walk, New Delhi', timings: '8 AM - 8 PM' },
-    { name: 'Dwarka', address: 'Sector 12, Near Dwarka Court, New Delhi', timings: '7 AM - 8 PM' },
+    { name: 'Greater Kailash-1', address: 'M-12, GK-1 Main Market, New Delhi', timings: 'Mon-Sat: 8AM-7PM | Sun: 8AM-5PM' },
+    { name: 'Punjabi Bagh', address: 'Ring Road, Near Metro Station, New Delhi', timings: 'Mon-Sat: 8AM-7PM | Sun: 8AM-5PM' },
+    { name: 'Lajpat Nagar', address: 'Central Market, Lajpat Nagar II, New Delhi', timings: 'Mon-Sat: 8AM-7PM | Sun: 8AM-5PM' },
+    { name: 'Saket', address: 'J Block, Saket, Near Select City Walk, New Delhi', timings: 'Mon-Sat: 8AM-7PM | Sun: 8AM-5PM' },
+    { name: 'Dwarka', address: 'Sector 12, Near Dwarka Court, New Delhi', timings: 'Mon-Sat: 8AM-7PM | Sun: 8AM-5PM' },
   ]
 
   return (
@@ -1052,11 +1059,11 @@ function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
           <div>
             <div className="flex items-center gap-2.5 mb-4">
-              <img src="/logo.png" alt="Dr Lalchandani Labs" className="h-12 w-auto" />
+              <img src="/logo-footer.png" alt="Dr Lalchandani Labs" className="h-14 w-auto" />
             </div>
             <p className="text-sm text-gray-400 leading-relaxed mb-4">
               NABL accredited diagnostic laboratory with 40+ years of clinical excellence. 
-              Trusted by 5 lakh+ patients across New Delhi.
+              Trusted by 20 lakh+ patients across New Delhi.
             </p>
             <div className="flex items-center gap-3">
               <Badge className="bg-yellow-900/30 text-yellow-400 hover:bg-yellow-900/30">NABL</Badge>
@@ -1098,7 +1105,7 @@ function Footer() {
                 <span>M-12, GK-1 Main Market,<br />New Delhi - 110048</span>
               </div>
               <div className="flex items-center gap-2 text-sm text-gray-400">
-                <Clock className="w-4 h-4 text-clinical" /> Mon-Sat: 7 AM - 9 PM
+                <Clock className="w-4 h-4 text-clinical" /> Mon-Sat: 8 AM - 7 PM | Sun: 8 AM - 5 PM
               </div>
             </div>
           </div>
@@ -1108,7 +1115,7 @@ function Footer() {
 
         <div className="flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-xs text-gray-500">
-            &copy; {new Date().getFullYear()} Dr. Lalchandani Labs. All rights reserved. | DPDP Act 2023 Compliant | DISHA Framework Ready
+            &copy; {new Date().getFullYear()} Dr Lalchandani Labs. All rights reserved. | DPDP Act 2023 Compliant | DISHA Framework Ready
           </p>
           <div className="flex items-center gap-4 text-xs text-gray-500">
             <button className="hover:text-white transition">Privacy Policy</button>
@@ -1635,8 +1642,7 @@ function MobileStickyBar() {
           href="https://wa.me/918010689689?text=Hi%2C%20I%20want%20to%20book%20a%20home%20collection"
           target="_blank"
           rel="noopener noreferrer"
-          className="flex-1 flex items-center justify-center gap-1.5 text-white py-2.5 rounded-xl font-semibold text-sm"
-          style={{ backgroundColor: '#80C7C8' }}
+          className="flex-1 flex items-center justify-center gap-1.5 bg-green-500 hover:bg-green-600 text-white py-2.5 rounded-xl font-semibold text-sm"
         >
           <svg className="w-5 h-5 drop-shadow-[0_0_4px_rgba(255,255,255,0.6)]" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
           Home Collection
@@ -1656,8 +1662,7 @@ function MobileStickyBar() {
         </button>
         <a
           href="tel:8010689689"
-          className="flex-1 flex items-center justify-center gap-1.5 text-white py-2.5 rounded-xl font-semibold text-sm"
-          style={{ backgroundColor: '#80C7C8' }}
+          className="flex-1 flex items-center justify-center gap-1.5 bg-lifegreen hover:bg-green-600 text-white py-2.5 rounded-xl font-semibold text-sm"
         >
           <PhoneCall className="w-4 h-4" /> Call Now
         </a>
@@ -1678,8 +1683,8 @@ export default function App() {
         <main>
           <HeroSection />
           <TrustBadges />
-          <TestCatalog />
           <HealthPackages />
+          <TestCatalog />
           <HowItWorks />
           <PrescriptionUpload />
           <WhyChooseUs />
