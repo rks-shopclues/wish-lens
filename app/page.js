@@ -184,6 +184,7 @@ function Header() {
                 { label: 'Home', id: 'home' },
                 { label: 'Book a Test', id: 'tests' },
                 { label: 'Health Packages', id: 'packages' },
+                { label: 'Investor Desk', id: 'investor-desk' },
               ].map(item => (
                 <button
                   key={item.id}
@@ -235,6 +236,7 @@ function Header() {
                 { label: 'Book a Test', id: 'tests' },
                 { label: 'Health Packages', id: 'packages' },
                 { label: 'Upload Prescription', id: 'prescription' },
+                { label: 'Investor Desk', id: 'investor-desk' },
               ].map(item => (
                 <button
                   key={item.id}
@@ -442,6 +444,7 @@ function TrustBadges() {
             { icon: Truck, text: 'Free Home Collection', color: 'text-lifegreen' },
             { icon: Award, text: 'NABL Accredited', color: 'text-yellow-600' },
             { icon: Stethoscope, text: 'Doctor Supervised', color: 'text-red-500' },
+            { icon: BadgeCheck, text: 'CGHS Empanelled', color: 'text-clinical' },
           ].map((item, i) => (
             <div key={i} className="flex items-center gap-2 text-gray-600">
               <div className={`w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center ${item.color}`}>
@@ -753,6 +756,48 @@ function HealthPackages() {
   )
 }
 
+// ============ SERVICES SECTION ============
+function ServicesSection() {
+  const services = [
+    { name: 'Blood Tests', icon: Droplets, desc: '500+ diagnostic blood tests with NABL accredited reports', color: 'bg-red-50 text-clinical' },
+    { name: 'X-Ray', icon: Activity, desc: 'Digital X-ray with instant results and expert radiologist reporting', color: 'bg-blue-50 text-blue-600' },
+    { name: 'Ultrasound & Color Doppler', icon: Heart, desc: 'Advanced ultrasound imaging with color Doppler technology', color: 'bg-purple-50 text-purple-600' },
+    { name: 'ECG', icon: Activity, desc: 'Electrocardiogram for heart rhythm and electrical activity analysis', color: 'bg-green-50 text-green-600' },
+    { name: 'TMT', icon: Timer, desc: 'Treadmill stress test for cardiac fitness and exercise tolerance', color: 'bg-orange-50 text-orange-600' },
+    { name: 'Uroflowmetry', icon: FlaskConical, desc: 'Non-invasive urine flow rate measurement for urological assessment', color: 'bg-teal-50 text-teal-600' },
+    { name: 'Pulmonary Function Test', icon: Activity, desc: 'Comprehensive lung function and breathing capacity assessment', color: 'bg-cyan-50 text-cyan-600' },
+    { name: 'Liver Fibroscan', icon: Shield, desc: 'Non-invasive liver stiffness measurement for fibrosis detection', color: 'bg-yellow-50 text-yellow-600' },
+    { name: 'NCV & EMG', icon: Zap, desc: 'Nerve conduction velocity and electromyography for nerve health', color: 'bg-indigo-50 text-indigo-600' },
+    { name: 'EEG', icon: Activity, desc: 'Electroencephalogram for brain electrical activity monitoring', color: 'bg-pink-50 text-pink-600' },
+  ]
+
+  return (
+    <section id="services" className="py-16 bg-white">
+      <div className="container mx-auto px-4">
+        <div className="text-center mb-10">
+          <Badge className="bg-purple-100 text-purple-700 hover:bg-purple-100 mb-3">Our Services</Badge>
+          <h2 className="text-3xl lg:text-4xl font-bold text-gray-900">Diagnostic Services</h2>
+          <p className="text-gray-500 mt-2 max-w-xl mx-auto">Comprehensive range of diagnostic services under one roof with state-of-the-art equipment</p>
+        </div>
+
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+          {services.map((service, i) => (
+            <Card key={i} className="group border-gray-100 hover:shadow-lg hover:border-clinical/20 transition-all duration-300 text-center">
+              <CardContent className="p-5">
+                <div className={`w-14 h-14 rounded-2xl ${service.color} flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition`}>
+                  <service.icon className="w-7 h-7" />
+                </div>
+                <h3 className="font-bold text-gray-900 text-sm leading-tight mb-1.5">{service.name}</h3>
+                <p className="text-[11px] text-gray-400 leading-relaxed">{service.desc}</p>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
 // ============ HOW IT WORKS ============
 function HowItWorks() {
   const steps = [
@@ -1045,6 +1090,120 @@ function CTASection() {
         <div className="mt-8 flex justify-center items-center gap-2 text-red-200 text-sm">
           <Shield className="w-4 h-4" />
           <span>ABDM Ready &bull; Link your ABHA ID for seamless health records</span>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+// ============ INVESTOR DESK ============
+function InvestorDesk() {
+  const [activeTab, setActiveTab] = useState('Announcements')
+
+  const categories = {
+    'Announcements': [
+      { name: 'Voting Results AGM 2025', url: 'https://lalchandanipathlab.com/assets/website/pdf/1.Announcements/1.%20Voting%20Results%20AGM%202025.pdf' },
+      { name: 'Proceedings AGM 2025', url: 'https://lalchandanipathlab.com/assets/website/pdf/1.Announcements/2.%20Proceedings%20AGM%202025.pdf' },
+      { name: 'Book Closure AGM 2025', url: 'https://lalchandanipathlab.com/assets/website/pdf/1.Announcements/3%20Book%20Closure%20AGM%202025.pdf' },
+      { name: 'Outcome BM 05.09.2025', url: 'https://lalchandanipathlab.com/assets/website/pdf/1.Announcements/4.%20Outcome%20BM%2005.09.2025.pdf' },
+      { name: 'Audited Results March 2025', url: 'https://lalchandanipathlab.com/assets/website/pdf/1.Announcements/5.%20Audited%20Results%20March%202025.pdf' },
+      { name: 'Appointment of CS Saniya Hussain', url: 'https://lalchandanipathlab.com/assets/website/pdf/1.Announcements/6.%20Appointment%20of%20CS_Saniya%20Hussain.pdf' },
+    ],
+    'Financial Results': [
+      { name: 'Unaudited Results Sep 2025', url: 'https://lalchandanipathlab.com/assets/website/pdf/4.Financial%20Results/Unaudited%20Results%20September%202025.pdf' },
+      { name: 'Audited Results March 2025', url: 'https://lalchandanipathlab.com/assets/website/pdf/4.Financial%20Results/1.%20Audited%20Results%20March%202025.pdf' },
+      { name: 'Unaudited Results 30.09.2024', url: 'https://lalchandanipathlab.com/assets/website/pdf/4.Financial%20Results/2.%20Unaudited%20Results_30.09.2024.pdf' },
+      { name: 'Audited Results March 2024', url: 'https://lalchandanipathlab.com/assets/website/pdf/4.Financial%20Results/3.%20Audited%20Results%20March%202024.pdf' },
+      { name: 'Unaudited Results 30.09.2023', url: 'https://lalchandanipathlab.com/assets/website/pdf/4.Financial%20Results/4.%20Unaudited%20Results%2030.09.2023.pdf' },
+      { name: 'Audited Results March 2023', url: 'https://lalchandanipathlab.com/assets/website/pdf/4.Financial%20Results/5.%20Audited%20Results%20March%202023.pdf' },
+    ],
+    'Annual Reports': [
+      { name: 'Annual Report 2025', url: 'https://lalchandanipathlab.com/assets/website/pdf/6.Notice%20and%20Annual%20Reports/16.%20Annual%20Report%202025.pdf' },
+      { name: 'Annual Report 2024', url: 'https://lalchandanipathlab.com/assets/website/pdf/6.Notice%20and%20Annual%20Reports/14.%20Annual%20Report%202024.pdf' },
+      { name: 'Notice 2024', url: 'https://lalchandanipathlab.com/assets/website/pdf/6.Notice%20and%20Annual%20Reports/13.Notice%202024.pdf' },
+      { name: 'Annual Report 2023', url: 'https://lalchandanipathlab.com/assets/website/pdf/6.Notice%20and%20Annual%20Reports/12.%20Annual%20Report%202023.pdf' },
+      { name: 'Annual Report 2022', url: 'https://lalchandanipathlab.com/assets/website/pdf/6.Notice%20and%20Annual%20Reports/10.%20Annual%20Report%202022.pdf' },
+      { name: 'Annual Report 2021', url: 'https://lalchandanipathlab.com/assets/website/pdf/6.Notice%20and%20Annual%20Reports/8.%20Annual%20Report%202021.pdf' },
+    ],
+    'Corporate Governance': [
+      { name: 'CG Non Applicability Dec 2025', url: 'https://lalchandanipathlab.com/assets/website/pdf/CG%20NON%20Applicability%20december%202025.pdf' },
+      { name: 'CG Non Applicability Sep 2025', url: 'https://lalchandanipathlab.com/assets/website/pdf/3.Corporate%20Governance/10.CG%20Non-applicability%20Sep%202025.pdf' },
+      { name: 'CG Non Applicability June 2025', url: 'https://lalchandanipathlab.com/assets/website/pdf/3.Corporate%20Governance/9.CG%20Non-applicability%20June%202025.pdf' },
+      { name: 'CG Non Applicability March 2025', url: 'https://lalchandanipathlab.com/assets/website/pdf/3.Corporate%20Governance/8.CG%20Non-applicability%20March%202025.pdf' },
+    ],
+    'Shareholding': [
+      { name: 'Shareholding Pattern Sep 2025', url: 'https://lalchandanipathlab.com/assets/website/pdf/10.Shareholding%20pattern/SHP/September%202025.pdf' },
+      { name: 'Shareholding Pattern March 2025', url: 'https://lalchandanipathlab.com/assets/website/pdf/10.Shareholding%20pattern/SHP/March%202025.pdf' },
+      { name: 'Shareholding Pattern Sep 2024', url: 'https://lalchandanipathlab.com/assets/website/pdf/10.Shareholding%20pattern/SHP/September%202024.pdf' },
+      { name: 'Shareholding Pattern March 2024', url: 'https://lalchandanipathlab.com/assets/website/pdf/10.Shareholding%20pattern/SHP/March%202024.pdf' },
+    ],
+    'Policies': [
+      { name: 'Familarization Policy', url: 'https://lalchandanipathlab.com/assets/website/pdf/policies/familarization-policy.pdf' },
+      { name: 'DDP', url: 'https://lalchandanipathlab.com/assets/website/pdf/policies/DDP.pdf' },
+      { name: 'RPT Policy', url: 'https://lalchandanipathlab.com/assets/website/pdf/policies/RPT%20policy.pdf' },
+      { name: 'Vigil Mechanism Policy', url: 'https://lalchandanipathlab.com/assets/website/pdf/policies/Vigil%20Mechanism%20Policy.pdf' },
+      { name: 'Code of Conduct', url: 'https://lalchandanipathlab.com/assets/website/pdf/policies/Code_of_Conduct_for_Directors_&_Senior_Management.pdf' },
+      { name: 'Materiality Policy', url: 'https://lalchandanipathlab.com/assets/website/pdf/policies/Materiality%20Policy.pdf' },
+    ],
+  }
+
+  const tabs = Object.keys(categories)
+
+  return (
+    <section id="investor-desk" className="py-16 bg-gray-50/50">
+      <div className="container mx-auto px-4">
+        <div className="text-center mb-10">
+          <Badge className="bg-clinical/10 text-clinical hover:bg-clinical/10 mb-3">BSE-SME Listed</Badge>
+          <h2 className="text-3xl lg:text-4xl font-bold text-gray-900">Investor Desk</h2>
+          <p className="text-gray-500 mt-2 max-w-xl mx-auto">Access financial reports, announcements, and corporate governance documents</p>
+        </div>
+
+        <div className="flex gap-2 mb-6 overflow-x-auto pb-2">
+          {tabs.map(tab => (
+            <button
+              key={tab}
+              onClick={() => setActiveTab(tab)}
+              className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition ${
+                activeTab === tab
+                  ? 'bg-clinical text-white shadow-md'
+                  : 'bg-white text-gray-600 hover:bg-gray-100 border'
+              }`}
+            >
+              {tab}
+            </button>
+          ))}
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+          {categories[activeTab]?.map((doc, i) => (
+            <a
+              key={i}
+              href={doc.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-3 p-4 bg-white rounded-xl border border-gray-100 hover:border-clinical/30 hover:shadow-md transition-all group"
+            >
+              <div className="w-10 h-10 bg-red-50 rounded-lg flex items-center justify-center shrink-0 group-hover:bg-clinical group-hover:text-white transition">
+                <FileText className="w-5 h-5 text-clinical group-hover:text-white" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-semibold text-gray-900 truncate group-hover:text-clinical transition">{doc.name}</p>
+                <p className="text-[10px] text-gray-400">PDF Document</p>
+              </div>
+              <Download className="w-4 h-4 text-gray-300 group-hover:text-clinical transition shrink-0" />
+            </a>
+          ))}
+        </div>
+
+        <div className="text-center mt-6">
+          <a
+            href="https://lalchandanipathlab.com/investordesk"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 text-clinical font-semibold text-sm hover:underline"
+          >
+            View All Documents on Investor Desk <ChevronRight className="w-4 h-4" />
+          </a>
         </div>
       </div>
     </section>
@@ -1685,10 +1844,12 @@ export default function App() {
           <TrustBadges />
           <HealthPackages />
           <TestCatalog />
+          <ServicesSection />
           <HowItWorks />
           <PrescriptionUpload />
           <WhyChooseUs />
           <LocationsSection />
+          <InvestorDesk />
           <CTASection />
         </main>
         <Footer />
