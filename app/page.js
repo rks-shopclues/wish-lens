@@ -1848,7 +1848,6 @@ export default function App() {
           <HowItWorks />
           <PrescriptionUpload />
           <WhyChooseUs />
-          <LocationsSection />
           <InvestorDesk />
           <CTASection />
         </main>
