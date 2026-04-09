@@ -105,8 +105,8 @@ function getTestsSeedData() {
       price: 449,
       originalPrice: 700,
       tat: "6 Hours",
-      fastingInfo: "10-12 Hrs Fasting Required",
-      fastingRequired: true,
+      fastingInfo: "No Fasting Required",
+      fastingRequired: false,
       description: "Comprehensive liver health panel including bilirubin, SGPT, SGOT, ALP, protein, and albumin levels.",
       parameters: 12,
       popular: true,
@@ -156,7 +156,7 @@ function getTestsSeedData() {
       price: 99,
       originalPrice: 150,
       tat: "4 Hours",
-      fastingInfo: "8-10 Hrs Fasting Required",
+      fastingInfo: "10-12 Hrs Fasting Required",
       fastingRequired: true,
       description: "Measures fasting glucose level in blood to screen for diabetes and pre-diabetes conditions.",
       parameters: 1,
@@ -240,35 +240,6 @@ function getPackagesSeedData() {
   return [
     {
       id: uuidv4(),
-      name: "Basic Health Checkup",
-      price: 999,
-      originalPrice: 1800,
-      description: "Essential screening for overall health. Recommended annually for ages 18-35.",
-      testsIncluded: ["CBC", "Blood Sugar (F)", "Urine Routine", "Lipid Profile"],
-      testCount: 4,
-      parameterCount: 46,
-      popular: true,
-      ageGroup: "18-35 Years",
-      gender: "Both",
-      icon: "heart"
-    },
-    {
-      id: uuidv4(),
-      name: "Comprehensive Health Checkup",
-      price: 2499,
-      originalPrice: 4500,
-      description: "Complete health screening covering all vital organs. Our most recommended package.",
-      testsIncluded: ["CBC", "Lipid Profile", "LFT", "KFT", "Thyroid Profile", "Blood Sugar (F)", "HbA1c", "Vitamin D", "Urine Routine"],
-      testCount: 9,
-      parameterCount: 82,
-      popular: true,
-      ageGroup: "All Ages",
-      gender: "Both",
-      icon: "shield",
-      recommended: true
-    },
-    {
-      id: uuidv4(),
       name: "Women's Wellness Package",
       price: 1999,
       originalPrice: 3500,
@@ -314,9 +285,17 @@ function getPackagesSeedData() {
 
 // ============ HANDLERS ============
 
-async function seedDatabase() {
+async function seedDatabase(request) {
   try {
     const db = await connectToDatabase();
+    const url = request ? new URL(request.url) : null;
+    const force = url?.searchParams?.get('force') === 'true';
+    
+    if (force) {
+      await db.collection('tests').deleteMany({});
+      await db.collection('packages').deleteMany({});
+    }
+    
     const existingTests = await db.collection('tests').countDocuments();
     if (existingTests > 0) {
       return NextResponse.json({ message: 'Database already seeded', tests: existingTests }, { headers: corsHeaders() });
@@ -565,7 +544,7 @@ export async function POST(request, context) {
     return NextResponse.json({ error: 'Not found' }, { status: 404, headers: corsHeaders() });
   }
   const pathStr = path.join('/');
-  if (pathStr === 'seed') return seedDatabase();
+  if (pathStr === 'seed') return seedDatabase(request);
   if (pathStr === 'leads') return createLead(request);
   if (pathStr === 'cart/add') return addToCart(request);
   if (pathStr === 'cart/remove') return removeFromCart(request);
