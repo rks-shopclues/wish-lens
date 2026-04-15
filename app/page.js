@@ -759,16 +759,16 @@ function HealthPackages() {
 // ============ SERVICES SECTION ============
 function ServicesSection() {
   const services = [
-    { name: 'Blood Tests', icon: Droplets, desc: '500+ diagnostic blood tests with NABL accredited reports', color: 'bg-red-50 text-clinical' },
-    { name: 'X-Ray', icon: Activity, desc: 'Digital X-ray with instant results and expert radiologist reporting', color: 'bg-blue-50 text-blue-600' },
-    { name: 'Ultrasound & Color Doppler', icon: Heart, desc: 'Advanced ultrasound imaging with color Doppler technology', color: 'bg-purple-50 text-purple-600' },
-    { name: 'ECG', icon: Activity, desc: 'Electrocardiogram for heart rhythm and electrical activity analysis', color: 'bg-green-50 text-green-600' },
-    { name: 'TMT', icon: Timer, desc: 'Treadmill stress test for cardiac fitness and exercise tolerance', color: 'bg-orange-50 text-orange-600' },
-    { name: 'Uroflowmetry', icon: FlaskConical, desc: 'Non-invasive urine flow rate measurement for urological assessment', color: 'bg-teal-50 text-teal-600' },
-    { name: 'Pulmonary Function Test', icon: Activity, desc: 'Comprehensive lung function and breathing capacity assessment', color: 'bg-cyan-50 text-cyan-600' },
-    { name: 'Liver Fibroscan', icon: Shield, desc: 'Non-invasive liver stiffness measurement for fibrosis detection', color: 'bg-yellow-50 text-yellow-600' },
-    { name: 'NCV & EMG', icon: Zap, desc: 'Nerve conduction velocity and electromyography for nerve health', color: 'bg-indigo-50 text-indigo-600' },
-    { name: 'EEG', icon: Activity, desc: 'Electroencephalogram for brain electrical activity monitoring', color: 'bg-pink-50 text-pink-600' },
+    { name: 'Blood Tests', image: 'https://images.pexels.com/photos/6285358/pexels-photo-6285358.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940', desc: '500+ diagnostic blood tests with NABL accredited reports' },
+    { name: 'X-Ray', image: 'https://images.unsplash.com/photo-1755526739866-c73f65b82f8e?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA2MDV8MHwxfHNlYXJjaHwxfHx4LXJheXxlbnwwfHx8fDE3NzYyODUyMDZ8MA&ixlib=rb-4.1.0&q=85', desc: 'Digital X-ray with instant results and expert radiologist reporting' },
+    { name: 'Ultrasound & Color Doppler', image: 'https://images.unsplash.com/photo-1691933880096-4046bc9e2fa0?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAxODF8MHwxfHNlYXJjaHwzfHx1bHRyYXNvdW5kfGVufDB8fHx8MTc3NjI4NTIxMHww&ixlib=rb-4.1.0&q=85', desc: 'Advanced ultrasound imaging with color Doppler technology' },
+    { name: 'ECG', image: 'https://images.unsplash.com/photo-1724395261682-c8b152dc5b9b?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2ODh8MHwxfHNlYXJjaHwxfHxFQ0d8ZW58MHx8fHwxNzc2Mjg1MjE0fDA&ixlib=rb-4.1.0&q=85', desc: 'Electrocardiogram for heart rhythm and electrical activity analysis' },
+    { name: 'TMT', image: 'https://images.pexels.com/photos/3845129/pexels-photo-3845129.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940', desc: 'Treadmill stress test for cardiac fitness and exercise tolerance' },
+    { name: 'Uroflowmetry', image: 'https://images.pexels.com/photos/13697729/pexels-photo-13697729.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940', desc: 'Non-invasive urine flow rate measurement for urological assessment' },
+    { name: 'Pulmonary Function Test', image: 'https://images.unsplash.com/photo-1516549655169-df83a0774514?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzNTl8MHwxfHNlYXJjaHwyfHxtZWRpY2FsJTIwZXF1aXBtZW50fGVufDB8fHx8MTc3NjI4NTIxOHww&ixlib=rb-4.1.0&q=85', desc: 'Comprehensive lung function and breathing capacity assessment' },
+    { name: 'Liver Fibroscan', image: 'https://images.unsplash.com/photo-1551076805-e1869033e561?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzNTl8MHwxfHNlYXJjaHw0fHxtZWRpY2FsJTIwZXF1aXBtZW50fGVufDB8fHx8MTc3NjI4NTIxOHww&ixlib=rb-4.1.0&q=85', desc: 'Non-invasive liver stiffness measurement for fibrosis detection' },
+    { name: 'NCV & EMG', image: 'https://images.pexels.com/photos/4966406/pexels-photo-4966406.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940', desc: 'Nerve conduction velocity and electromyography for nerve health' },
+    { name: 'EEG', image: 'https://images.unsplash.com/photo-1682706841281-f723c5bfcd83?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2ODh8MHwxfHNlYXJjaHwzfHxFQ0d8ZW58MHx8fHwxNzc2Mjg1MjE0fDA&ixlib=rb-4.1.0&q=85', desc: 'Electroencephalogram for brain electrical activity monitoring' },
   ]
 
   return (
@@ -782,11 +782,16 @@ function ServicesSection() {
 
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
           {services.map((service, i) => (
-            <Card key={i} className="group border-gray-100 hover:shadow-lg hover:border-clinical/20 transition-all duration-300 text-center">
-              <CardContent className="p-5">
-                <div className={`w-14 h-14 rounded-2xl ${service.color} flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition`}>
-                  <service.icon className="w-7 h-7" />
-                </div>
+            <Card key={i} className="group border-gray-100 hover:shadow-lg hover:border-clinical/20 transition-all duration-300 text-center overflow-hidden">
+              <div className="relative w-full h-32 overflow-hidden">
+                <img
+                  src={service.image}
+                  alt={service.name}
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+              </div>
+              <CardContent className="p-4">
                 <h3 className="font-bold text-gray-900 text-sm leading-tight mb-1.5">{service.name}</h3>
                 <p className="text-[11px] text-gray-400 leading-relaxed">{service.desc}</p>
               </CardContent>
