@@ -5,26 +5,42 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
-import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog'
 import { Separator } from '@/components/ui/separator'
 import { toast } from 'sonner'
 import {
-  Phone, MapPin, Clock, Search, ShoppingCart, Trash2, Upload,
+  Phone, MapPin, Clock, Search, Upload,
   FileText, CheckCircle, Shield, Award, Users, Microscope, Heart,
   FlaskConical, Droplets, Timer, Star, ChevronRight, Menu, X,
   ArrowRight, Stethoscope, Truck, BadgeCheck, Activity, Download,
-  Sun, Zap, PieChart, TestTubes, Home, Calendar, CreditCard,
+  Sun, Zap, PieChart, TestTubes, Home, Calendar,
   CircleDot, Package, UserCheck, ClipboardList, PhoneCall, MapPinned
 } from 'lucide-react'
 
-// ============ CART CONTEXT ============
-const CartContext = createContext()
+// ============ WHATSAPP HELPER ============
+const WHATSAPP_NUMBER = '917669989614'
 
-function CartProvider({ children }) {
-  const [cart, setCart] = useState([])
+const getWhatsAppUrl = (itemName) => {
+  const message = encodeURIComponent(`Hi, I'd like to book ${itemName}`)
+  return `https://wa.me/${WHATSAPP_NUMBER}?text=${message}`
+}
+
+const getWhatsAppGenericUrl = (text) => {
+  const message = encodeURIComponent(text || "Hi, I want to book a test")
+  return `https://wa.me/${WHATSAPP_NUMBER}?text=${message}`
+}
+
+const WhatsAppIcon = ({ className = "w-5 h-5" }) => (
+  <svg className={className} fill="currentColor" viewBox="0 0 24 24">
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+  </svg>
+)
+
+// ============ APP CONTEXT ============
+const AppContext = createContext()
+
+function AppProvider({ children }) {
   const [sessionId, setSessionId] = useState('')
-  const [isCartOpen, setIsCartOpen] = useState(false)
   const [user, setUser] = useState(null)
 
   useEffect(() => {
@@ -38,57 +54,7 @@ function CartProvider({ children }) {
     if (savedUser) {
       try { setUser(JSON.parse(savedUser)) } catch(e) {}
     }
-    fetchCart(sid)
   }, [])
-
-  const fetchCart = async (sid) => {
-    try {
-      const res = await fetch(`/api/cart/${sid || sessionId}`)
-      const data = await res.json()
-      setCart(data.cart || [])
-    } catch (e) { console.error('Cart fetch failed', e) }
-  }
-
-  const addToCart = async (item) => {
-    try {
-      const res = await fetch('/api/cart/add', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          sessionId,
-          itemId: item.id,
-          itemType: item.itemType || 'test',
-          name: item.name,
-          price: item.price
-        })
-      })
-      const data = await res.json()
-      if (data.cart) setCart(data.cart)
-      setIsCartOpen(true)
-      toast.success(`${item.name} added to cart`)
-    } catch (e) {
-      toast.error('Failed to add to cart')
-    }
-  }
-
-  const removeFromCart = async (itemId) => {
-    try {
-      const res = await fetch('/api/cart/remove', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ sessionId, itemId })
-      })
-      const data = await res.json()
-      if (data.cart) setCart(data.cart)
-      toast.info('Item removed from cart')
-    } catch (e) {
-      toast.error('Failed to remove item')
-    }
-  }
-
-  const cartTotal = cart.reduce((sum, item) => sum + (item.price || 0), 0)
-
-  const isInCart = (itemId) => cart.some(item => item.itemId === itemId)
 
   const login = (userData) => {
     setUser(userData)
@@ -101,17 +67,13 @@ function CartProvider({ children }) {
   }
 
   return (
-    <CartContext.Provider value={{
-      cart, addToCart, removeFromCart, cartTotal,
-      isCartOpen, setIsCartOpen, sessionId,
-      user, login, logout, fetchCart, isInCart
-    }}>
+    <AppContext.Provider value={{ sessionId, user, login, logout }}>
       {children}
-    </CartContext.Provider>
+    </AppContext.Provider>
   )
 }
 
-const useCart = () => useContext(CartContext)
+const useApp = () => useContext(AppContext)
 
 // ============ TEST ICON HELPER ============
 const TestIcon = ({ name, className = "w-5 h-5" }) => {
@@ -132,7 +94,6 @@ const TestIcon = ({ name, className = "w-5 h-5" }) => {
 
 // ============ HEADER ============
 function Header() {
-  const { cart, setIsCartOpen } = useCart()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [showLogin, setShowLogin] = useState(false)
 
@@ -147,12 +108,12 @@ function Header() {
         <div className="bg-clinical text-white text-sm py-1.5">
           <div className="container mx-auto px-4 flex justify-between items-center">
             <a
-              href="https://wa.me/918010689689?text=Hi%2C%20I%20want%20to%20book%20a%20test"
+              href={getWhatsAppGenericUrl("Hi, I want to book a test")}
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-2 hover:text-green-200 transition font-medium"
             >
-              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+              <WhatsAppIcon className="w-4 h-4" />
               <span>Book on WhatsApp</span>
               <span className="hidden sm:inline text-red-200">|</span>
               <span className="hidden sm:inline text-red-200 text-xs">Same-Day Collection</span>
@@ -209,17 +170,14 @@ function Header() {
             </nav>
 
             <div className="flex items-center gap-2">
-              <button
-                onClick={() => setIsCartOpen(true)}
-                className="relative p-2.5 rounded-lg hover:bg-gray-100 transition"
+              <a
+                href={getWhatsAppGenericUrl("Hi, I want to book a test")}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hidden sm:flex items-center gap-1.5 bg-green-500 hover:bg-green-600 text-white px-3 py-2 rounded-lg text-sm font-semibold transition"
               >
-                <ShoppingCart className="w-5 h-5 text-gray-600" />
-                {cart.length > 0 && (
-                  <span className="absolute -top-0.5 -right-0.5 bg-lifegreen text-white text-[10px] w-5 h-5 rounded-full flex items-center justify-center font-bold">
-                    {cart.length}
-                  </span>
-                )}
-              </button>
+                <WhatsAppIcon className="w-4 h-4" /> Book Now
+              </a>
               <button
                 className="lg:hidden p-2.5 rounded-lg hover:bg-gray-100"
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -461,7 +419,6 @@ function TrustBadges() {
 
 // ============ TEST CATALOG ============
 function TestCatalog() {
-  const { addToCart, isInCart } = useCart()
   const [tests, setTests] = useState([])
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')
@@ -588,22 +545,14 @@ function TestCatalog() {
                       </div>
                     </div>
 
-                    <Button
-                      onClick={() => addToCart({ id: test.id, name: test.name, price: test.price, itemType: 'test' })}
-                      disabled={isInCart(test.id)}
-                      className={`w-full mt-3 text-sm font-semibold ${
-                        isInCart(test.id)
-                          ? 'bg-gray-100 text-gray-500 hover:bg-gray-100 cursor-default'
-                          : 'bg-lifegreen hover:bg-green-600 text-white shadow-sm'
-                      }`}
-                      size="sm"
+                    <a
+                      href={getWhatsAppUrl(test.name)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-full mt-3 text-sm font-semibold bg-green-500 hover:bg-green-600 text-white shadow-sm inline-flex items-center justify-center gap-1.5 rounded-md px-3 py-2 transition-colors"
                     >
-                      {isInCart(test.id) ? (
-                        <span className="flex items-center gap-1.5"><CheckCircle className="w-4 h-4" /> Added to Cart</span>
-                      ) : (
-                        <span className="flex items-center gap-1.5"><ShoppingCart className="w-4 h-4" /> Add to Cart</span>
-                      )}
-                    </Button>
+                      <WhatsAppIcon className="w-4 h-4" /> Book Now
+                    </a>
                   </CardContent>
                 </Card>
               ))}
@@ -636,7 +585,6 @@ function TestCatalog() {
 
 // ============ HEALTH PACKAGES ============
 function HealthPackages() {
-  const { addToCart, isInCart } = useCart()
   const [packages, setPackages] = useState([])
   const [loading, setLoading] = useState(true)
 
@@ -738,14 +686,14 @@ function HealthPackages() {
                     <span className="text-2xl font-extrabold text-gray-900">&#8377;{pkg.price}</span>
                     <span className="text-sm text-gray-400 line-through ml-2">&#8377;{pkg.originalPrice}</span>
                   </div>
-                  <Button
-                    onClick={() => addToCart({ id: pkg.id, name: pkg.name, price: pkg.price, itemType: 'package' })}
-                    disabled={isInCart(pkg.id)}
-                    className={isInCart(pkg.id) ? 'bg-gray-100 text-gray-500 hover:bg-gray-100' : 'bg-lifegreen hover:bg-green-600 text-white shadow-md'}
-                    size="sm"
+                  <a
+                    href={getWhatsAppUrl(pkg.name)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 bg-green-500 hover:bg-green-600 text-white shadow-md rounded-md px-4 py-2 text-sm font-semibold transition-colors"
                   >
-                    {isInCart(pkg.id) ? 'In Cart' : 'Book Now'}
-                  </Button>
+                    <WhatsAppIcon className="w-4 h-4" /> Book Now
+                  </a>
                 </CardFooter>
               </Card>
             ))}
@@ -845,7 +793,7 @@ function HowItWorks() {
 
 // ============ PRESCRIPTION UPLOAD ============
 function PrescriptionUpload() {
-  const { sessionId } = useCart()
+  const { sessionId } = useApp()
   const [dragActive, setDragActive] = useState(false)
   const [uploading, setUploading] = useState(false)
   const [uploaded, setUploaded] = useState(false)
@@ -1075,15 +1023,15 @@ function CTASection() {
           Get started with a free home sample collection. NABL accredited reports delivered in 6 hours.
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <a href="https://wa.me/918010689689?text=Hi%2C%20I%20want%20to%20book%20a%20test" target="_blank" rel="noopener noreferrer">
+          <a href={getWhatsAppGenericUrl("Hi, I want to book a health checkup")} target="_blank" rel="noopener noreferrer">
             <Button className="bg-green-500 hover:bg-green-600 text-white font-bold text-lg px-8 py-6 shadow-lg">
-              <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+              <WhatsAppIcon className="w-5 h-5 mr-2" />
               Book on WhatsApp
             </Button>
           </a>
-          <a href="tel:8010689689">
+          <a href="tel:7669989614">
             <Button className="bg-white text-clinical hover:bg-gray-100 font-bold text-lg px-8 py-6">
-              <PhoneCall className="mr-2 w-5 h-5" /> Call 80-10-689-689
+              <PhoneCall className="mr-2 w-5 h-5" /> Call 76699-89614
             </Button>
           </a>
         </div>
@@ -1261,8 +1209,8 @@ function Footer() {
           <div>
             <h4 className="text-white font-semibold mb-4">Contact Us</h4>
             <div className="space-y-3">
-              <a href="tel:8010689689" className="flex items-center gap-2 text-sm text-gray-400 hover:text-white transition">
-                <Phone className="w-4 h-4 text-clinical" /> 80-10-689-689
+              <a href="tel:7669989614" className="flex items-center gap-2 text-sm text-gray-400 hover:text-white transition">
+                <Phone className="w-4 h-4 text-clinical" /> 76699-89614
               </a>
               <div className="flex items-start gap-2 text-sm text-gray-400">
                 <MapPin className="w-4 h-4 text-clinical shrink-0 mt-0.5" />
@@ -1292,340 +1240,9 @@ function Footer() {
   )
 }
 
-// ============ CART SHEET ============
-function CartSheet() {
-  const { cart, removeFromCart, cartTotal, isCartOpen, setIsCartOpen, sessionId } = useCart()
-  const [showBooking, setShowBooking] = useState(false)
-
-  return (
-    <>
-      <Sheet open={isCartOpen} onOpenChange={setIsCartOpen}>
-        <SheetContent className="w-full sm:max-w-md overflow-y-auto">
-          <SheetHeader className="pb-4">
-            <SheetTitle className="flex items-center gap-2">
-              <ShoppingCart className="w-5 h-5 text-clinical" />
-              Your Cart ({cart.length} items)
-            </SheetTitle>
-          </SheetHeader>
-
-          {cart.length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-16 text-center">
-              <ShoppingCart className="w-16 h-16 text-gray-200 mb-4" />
-              <h3 className="font-bold text-gray-900 text-lg">Your cart is empty</h3>
-              <p className="text-sm text-gray-500 mt-1">Add tests or packages to get started</p>
-              <Button
-                className="mt-4 bg-clinical hover:bg-clinical-dark"
-                onClick={() => {
-                  setIsCartOpen(false)
-                  document.getElementById('tests')?.scrollIntoView({ behavior: 'smooth' })
-                }}
-              >
-                Browse Tests
-              </Button>
-            </div>
-          ) : (
-            <div className="space-y-3">
-              {cart.map(item => (
-                <div key={item.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                  <div className="flex-1">
-                    <p className="font-semibold text-gray-900 text-sm">{item.name}</p>
-                    <p className="text-xs text-gray-500 capitalize">{item.itemType}</p>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <span className="font-bold text-gray-900">&#8377;{item.price}</span>
-                    <button
-                      onClick={() => removeFromCart(item.itemId)}
-                      className="p-1.5 rounded-lg hover:bg-red-50 text-gray-400 hover:text-red-500 transition"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </button>
-                  </div>
-                </div>
-              ))}
-
-              <Separator />
-
-              <div className="space-y-2 pt-2">
-                <div className="flex justify-between text-sm">
-                  <span className="text-gray-500">Subtotal</span>
-                  <span className="font-semibold">&#8377;{cartTotal}</span>
-                </div>
-                <div className="flex justify-between text-sm">
-                  <span className="text-gray-500">Home Collection</span>
-                  <span className="text-lifegreen font-semibold">FREE</span>
-                </div>
-                <Separator />
-                <div className="flex justify-between">
-                  <span className="font-bold text-lg">Total</span>
-                  <span className="font-extrabold text-xl text-clinical">&#8377;{cartTotal}</span>
-                </div>
-              </div>
-
-              <Button
-                className="w-full bg-lifegreen hover:bg-green-600 text-white py-6 text-base font-bold mt-4"
-                onClick={() => { setIsCartOpen(false); setShowBooking(true) }}
-              >
-                Proceed to Book <ArrowRight className="ml-2 w-5 h-5" />
-              </Button>
-
-              <p className="text-[10px] text-center text-gray-400">
-                Payment options: Pay Online or Pay at Home
-              </p>
-            </div>
-          )}
-        </SheetContent>
-      </Sheet>
-      <BookingDialog open={showBooking} onOpenChange={setShowBooking} />
-    </>
-  )
-}
-
-// ============ BOOKING DIALOG ============
-function BookingDialog({ open, onOpenChange }) {
-  const { cart, cartTotal, sessionId, user, fetchCart } = useCart()
-  const [step, setStep] = useState(1)
-  const [formData, setFormData] = useState({
-    patientName: '',
-    patientAge: '',
-    patientGender: 'male',
-    mobile: user?.mobile || '',
-    address: '',
-    timeSlot: '',
-    collectionType: 'home',
-    paymentMethod: 'pay_at_home'
-  })
-  const [booking, setBooking] = useState(null)
-  const [loading, setLoading] = useState(false)
-
-  const timeSlots = [
-    '7:00 AM - 8:00 AM', '8:00 AM - 9:00 AM', '9:00 AM - 10:00 AM',
-    '10:00 AM - 11:00 AM', '11:00 AM - 12:00 PM', '2:00 PM - 3:00 PM',
-    '3:00 PM - 4:00 PM', '4:00 PM - 5:00 PM'
-  ]
-
-  const handleSubmit = async () => {
-    setLoading(true)
-    try {
-      const res = await fetch('/api/bookings', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          ...formData,
-          sessionId,
-          userId: user?.id,
-          items: cart.map(i => ({ id: i.itemId, name: i.name, price: i.price, type: i.itemType })),
-          totalAmount: cartTotal
-        })
-      })
-      const data = await res.json()
-      if (res.ok) {
-        setBooking(data.booking)
-        setStep(3)
-        fetchCart(sessionId)
-        toast.success('Booking confirmed!')
-      }
-    } catch (e) {
-      toast.error('Booking failed. Please try again.')
-    }
-    setLoading(false)
-  }
-
-  const resetAndClose = () => {
-    setStep(1)
-    setBooking(null)
-    setFormData({ patientName: '', patientAge: '', patientGender: 'male', mobile: '', address: '', timeSlot: '', collectionType: 'home', paymentMethod: 'pay_at_home' })
-    onOpenChange(false)
-  }
-
-  return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-lg max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle className="flex items-center gap-2">
-            <Calendar className="w-5 h-5 text-clinical" />
-            {step === 3 ? 'Booking Confirmed!' : 'Complete Your Booking'}
-          </DialogTitle>
-          {step !== 3 && <DialogDescription>Step {step} of 2</DialogDescription>}
-        </DialogHeader>
-
-        {step === 1 && (
-          <div className="space-y-4 pt-2">
-            <div>
-              <label className="text-sm font-semibold text-gray-700 mb-1.5 block">Patient Name</label>
-              <Input
-                placeholder="Enter full name"
-                value={formData.patientName}
-                onChange={(e) => setFormData(prev => ({...prev, patientName: e.target.value}))}
-              />
-            </div>
-            <div className="grid grid-cols-2 gap-3">
-              <div>
-                <label className="text-sm font-semibold text-gray-700 mb-1.5 block">Age</label>
-                <Input
-                  type="number"
-                  placeholder="Age"
-                  value={formData.patientAge}
-                  onChange={(e) => setFormData(prev => ({...prev, patientAge: e.target.value}))}
-                />
-              </div>
-              <div>
-                <label className="text-sm font-semibold text-gray-700 mb-1.5 block">Gender</label>
-                <div className="flex gap-2">
-                  {['male', 'female', 'other'].map(g => (
-                    <button
-                      key={g}
-                      onClick={() => setFormData(prev => ({...prev, patientGender: g}))}
-                      className={`flex-1 py-2 px-3 rounded-lg border text-sm font-medium capitalize transition ${
-                        formData.patientGender === g ? 'bg-clinical text-white border-clinical' : 'bg-white text-gray-600 hover:bg-gray-50'
-                      }`}
-                    >
-                      {g}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            </div>
-            <div>
-              <label className="text-sm font-semibold text-gray-700 mb-1.5 block">Mobile Number</label>
-              <div className="flex items-center border rounded-lg overflow-hidden">
-                <span className="px-3 py-2.5 bg-gray-50 text-sm text-gray-500 border-r">+91</span>
-                <Input
-                  type="tel"
-                  placeholder="10-digit mobile"
-                  value={formData.mobile}
-                  onChange={(e) => setFormData(prev => ({...prev, mobile: e.target.value.replace(/\D/g, '').slice(0, 10)}))}
-                  className="border-0 focus-visible:ring-0"
-                />
-              </div>
-            </div>
-            <Button
-              className="w-full bg-clinical hover:bg-clinical-dark py-5"
-              onClick={() => setStep(2)}
-              disabled={!formData.patientName || !formData.mobile || formData.mobile.length !== 10}
-            >
-              Continue <ArrowRight className="ml-2 w-4 h-4" />
-            </Button>
-          </div>
-        )}
-
-        {step === 2 && (
-          <div className="space-y-4 pt-2">
-            <div>
-              <label className="text-sm font-semibold text-gray-700 mb-1.5 block">Collection Type</label>
-              <div className="grid grid-cols-2 gap-3">
-                {[{ value: 'home', label: 'Home Collection', icon: Home }, { value: 'center', label: 'Visit Center', icon: MapPinned }].map(opt => (
-                  <button
-                    key={opt.value}
-                    onClick={() => setFormData(prev => ({...prev, collectionType: opt.value}))}
-                    className={`p-3 rounded-lg border text-sm font-medium flex items-center gap-2 transition ${
-                      formData.collectionType === opt.value ? 'bg-clinical text-white border-clinical' : 'bg-white text-gray-600 hover:bg-gray-50'
-                    }`}
-                  >
-                    <opt.icon className="w-4 h-4" /> {opt.label}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {formData.collectionType === 'home' && (
-              <div>
-                <label className="text-sm font-semibold text-gray-700 mb-1.5 block">Address</label>
-                <Input
-                  placeholder="Enter complete address with pincode"
-                  value={formData.address}
-                  onChange={(e) => setFormData(prev => ({...prev, address: e.target.value}))}
-                />
-              </div>
-            )}
-
-            <div>
-              <label className="text-sm font-semibold text-gray-700 mb-2 block">Preferred Time Slot</label>
-              <div className="grid grid-cols-2 gap-2">
-                {timeSlots.map(slot => (
-                  <button
-                    key={slot}
-                    onClick={() => setFormData(prev => ({...prev, timeSlot: slot}))}
-                    className={`py-2 px-3 rounded-lg border text-xs font-medium transition ${
-                      formData.timeSlot === slot ? 'bg-clinical text-white border-clinical' : 'bg-white text-gray-600 hover:bg-gray-50'
-                    }`}
-                  >
-                    {slot}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <div>
-              <label className="text-sm font-semibold text-gray-700 mb-1.5 block">Payment Method</label>
-              <div className="grid grid-cols-2 gap-3">
-                {[{ value: 'pay_at_home', label: 'Pay at Home', icon: CreditCard }, { value: 'online', label: 'Pay Online', icon: CreditCard }].map(opt => (
-                  <button
-                    key={opt.value}
-                    onClick={() => setFormData(prev => ({...prev, paymentMethod: opt.value}))}
-                    className={`p-3 rounded-lg border text-sm font-medium flex items-center gap-2 transition ${
-                      formData.paymentMethod === opt.value ? 'bg-clinical text-white border-clinical' : 'bg-white text-gray-600 hover:bg-gray-50'
-                    }`}
-                  >
-                    <opt.icon className="w-4 h-4" /> {opt.label}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <Separator />
-
-            <div className="bg-gray-50 rounded-lg p-3 space-y-1">
-              {cart.map(item => (
-                <div key={item.id} className="flex justify-between text-sm">
-                  <span className="text-gray-600">{item.name}</span>
-                  <span className="font-medium">&#8377;{item.price}</span>
-                </div>
-              ))}
-              <Separator className="my-2" />
-              <div className="flex justify-between font-bold">
-                <span>Total</span>
-                <span className="text-clinical">&#8377;{cartTotal}</span>
-              </div>
-            </div>
-
-            <div className="flex gap-3">
-              <Button variant="outline" onClick={() => setStep(1)} className="flex-1">
-                Back
-              </Button>
-              <Button
-                className="flex-1 bg-lifegreen hover:bg-green-600"
-                onClick={handleSubmit}
-                disabled={loading || !formData.timeSlot || (formData.collectionType === 'home' && !formData.address)}
-              >
-                {loading ? 'Confirming...' : 'Confirm Booking'}
-              </Button>
-            </div>
-          </div>
-        )}
-
-        {step === 3 && booking && (
-          <div className="text-center py-4">
-            <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <CheckCircle className="w-12 h-12 text-lifegreen" />
-            </div>
-            <h3 className="text-xl font-bold text-gray-900 mb-2">Booking Confirmed!</h3>
-            <p className="text-gray-500 text-sm mb-1">Booking ID: <strong>{booking.id?.slice(0, 8).toUpperCase()}</strong></p>
-            <p className="text-gray-500 text-sm mb-6">
-              Our phlebotomist will arrive at your selected time. You will receive a confirmation SMS shortly.
-            </p>
-            <Button onClick={resetAndClose} className="bg-clinical hover:bg-clinical-dark">
-              Done
-            </Button>
-          </div>
-        )}
-      </DialogContent>
-    </Dialog>
-  )
-}
-
 // ============ OTP DIALOG ============
 function OTPDialog({ open, onOpenChange }) {
-  const { login } = useCart()
+  const { login } = useApp()
   const [step, setStep] = useState(1)
   const [mobile, setMobile] = useState('')
   const [otp, setOtp] = useState('')
@@ -1779,15 +1396,13 @@ function OTPDialog({ open, onOpenChange }) {
 function WhatsAppButton() {
   return (
     <a
-      href="https://wa.me/918010689689?text=Hi%2C%20I%20want%20to%20book%20a%20test"
+      href={getWhatsAppGenericUrl("Hi, I want to book a test")}
       target="_blank"
       rel="noopener noreferrer"
       className="fixed bottom-20 lg:bottom-6 right-4 z-50 bg-green-500 hover:bg-green-600 text-white p-3.5 rounded-full shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-110 group"
       title="Chat on WhatsApp"
     >
-      <svg className="w-7 h-7" fill="currentColor" viewBox="0 0 24 24">
-        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
-      </svg>
+      <WhatsAppIcon className="w-7 h-7" />
       <span className="absolute right-full mr-3 top-1/2 -translate-y-1/2 bg-white text-gray-800 text-sm font-medium px-3 py-1.5 rounded-lg shadow-lg whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">
         Chat on WhatsApp
       </span>
@@ -1797,35 +1412,28 @@ function WhatsAppButton() {
 
 // ============ MOBILE STICKY BAR ============
 function MobileStickyBar() {
-  const { cart, setIsCartOpen } = useCart()
-
   return (
     <div className="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t shadow-2xl px-4 py-2.5">
       <div className="flex gap-2">
         <a
-          href="https://wa.me/918010689689?text=Hi%2C%20I%20want%20to%20book%20a%20home%20collection"
+          href={getWhatsAppGenericUrl("Hi, I want to book a home collection")}
           target="_blank"
           rel="noopener noreferrer"
           className="flex-1 flex items-center justify-center gap-1.5 bg-green-500 hover:bg-green-600 text-white py-2.5 rounded-xl font-semibold text-sm"
         >
-          <svg className="w-5 h-5 drop-shadow-[0_0_4px_rgba(255,255,255,0.6)]" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          <WhatsAppIcon className="w-5 h-5 drop-shadow-[0_0_4px_rgba(255,255,255,0.6)]" />
           Home Collection
         </a>
-        <button
-          onClick={() => {
-            if (cart.length > 0) {
-              setIsCartOpen(true)
-            } else {
-              document.getElementById('tests')?.scrollIntoView({ behavior: 'smooth' })
-            }
-          }}
-          className="flex-1 flex items-center justify-center gap-1.5 bg-clinical text-white py-2.5 rounded-xl font-semibold text-sm relative"
-        >
-          <ShoppingCart className="w-4 h-4" />
-          {cart.length > 0 ? `Cart (${cart.length})` : 'Book Test'}
-        </button>
         <a
-          href="tel:8010689689"
+          href={getWhatsAppGenericUrl("Hi, I want to book a test")}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex-1 flex items-center justify-center gap-1.5 bg-clinical text-white py-2.5 rounded-xl font-semibold text-sm"
+        >
+          <WhatsAppIcon className="w-4 h-4" /> Book Now
+        </a>
+        <a
+          href="tel:7669989614"
           className="flex-1 flex items-center justify-center gap-1.5 bg-lifegreen hover:bg-green-600 text-white py-2.5 rounded-xl font-semibold text-sm"
         >
           <PhoneCall className="w-4 h-4" /> Call Now
@@ -1841,7 +1449,7 @@ function MobileStickyBar() {
 // ============ MAIN PAGE ============
 export default function App() {
   return (
-    <CartProvider>
+    <AppProvider>
       <div className="min-h-screen bg-white">
         <Header />
         <main>
@@ -1857,10 +1465,9 @@ export default function App() {
           <CTASection />
         </main>
         <Footer />
-        <CartSheet />
         <WhatsAppButton />
         <MobileStickyBar />
       </div>
-    </CartProvider>
+    </AppProvider>
   )
 }
