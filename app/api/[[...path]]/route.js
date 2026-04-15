@@ -261,7 +261,7 @@ function getPackagesSeedData() {
       price: 1999,
       originalPrice: 5700,
       description: "Our most popular package. Gold standard screening with 78 parameters covering all vital organs.",
-      testsIncluded: ["CBC", "Lipid Profile", "LFT", "KFT", "Thyroid Profile", "Blood Sugar (F)", "HbA1c", "Vitamin D", "Urine Routine"],
+      testsIncluded: ["CBC", "Lipid Profile", "LFT", "KFT", "Thyroid Profile", "Blood Sugar (F)", "HbA1c", "Vitamin D", "Vitamin B12", "Urine Routine"],
       testCount: 10,
       parameterCount: 78,
       popular: true,
