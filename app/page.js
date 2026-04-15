@@ -167,7 +167,7 @@ function Header() {
               </span>
               <span className="text-red-200">|</span>
               <span className="flex items-center gap-1">
-                <BadgeCheck className="w-3.5 h-3.5" /> ISO 15189
+                <BadgeCheck className="w-3.5 h-3.5" /> CGHS Empanelled
               </span>
             </div>
           </div>

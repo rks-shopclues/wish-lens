@@ -10,7 +10,7 @@ import time
 from typing import Dict, List, Any
 
 # Configuration
-BASE_URL = "https://lab-ehr-system.preview.emergentagent.com/api"
+BASE_URL = "https://labtest-booking-1.preview.emergentagent.com/api"
 TEST_SESSION_ID = "test_session_" + str(uuid.uuid4())[:8]
 TEST_MOBILE = "9876543210"
 TEST_OTP = "123456"
