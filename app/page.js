@@ -182,7 +182,7 @@ function Header() {
             <nav className="hidden lg:flex items-center gap-1">
               {[
                 { label: 'Home', id: 'home' },
-                { label: 'Book a Test', id: 'tests' },
+                { label: 'Health Scans', id: 'tests' },
                 { label: 'Health Packages', id: 'packages' },
                 { label: 'Investor Desk', id: 'investor-desk' },
               ].map(item => (
@@ -233,7 +233,7 @@ function Header() {
             <div className="lg:hidden mt-3 pb-3 border-t pt-3 space-y-1 animate-fade-in">
               {[
                 { label: 'Home', id: 'home' },
-                { label: 'Book a Test', id: 'tests' },
+                { label: 'Health Scans', id: 'tests' },
                 { label: 'Health Packages', id: 'packages' },
                 { label: 'Upload Prescription', id: 'prescription' },
                 { label: 'Investor Desk', id: 'investor-desk' },
@@ -459,7 +459,7 @@ function TrustBadges() {
   )
 }
 
-// ============ TEST CATALOG ============
+// ============ HEALTH SCANS & IMAGING TESTS ============
 function TestCatalog() {
   const { addToCart, isInCart } = useCart()
   const [tests, setTests] = useState([])
@@ -467,8 +467,18 @@ function TestCatalog() {
   const [search, setSearch] = useState('')
   const [activeCategory, setActiveCategory] = useState('All')
   const [showAll, setShowAll] = useState(false)
+  const scrollRef = useRef(null)
 
   const categories = ['All', 'Haematology', 'Biochemistry', 'Endocrinology', 'Diabetology', 'Clinical Pathology', 'Immunology']
+
+  const categoryGradients = {
+    'Haematology': 'from-red-500 to-red-700',
+    'Biochemistry': 'from-blue-500 to-blue-700',
+    'Endocrinology': 'from-purple-500 to-purple-700',
+    'Diabetology': 'from-amber-500 to-orange-600',
+    'Clinical Pathology': 'from-teal-500 to-teal-700',
+    'Immunology': 'from-green-500 to-green-700',
+  }
 
   useEffect(() => {
     fetchTests()
@@ -476,7 +486,6 @@ function TestCatalog() {
 
   const fetchTests = async () => {
     try {
-      // First try to seed
       await fetch('/api/seed', { method: 'POST' })
       const res = await fetch('/api/tests')
       const data = await res.json()
@@ -493,38 +502,46 @@ function TestCatalog() {
     return matchesCategory && matchesSearch
   })
 
-  const displayTests = showAll ? filteredTests : filteredTests.slice(0, 8)
+  const displayTests = showAll ? filteredTests : filteredTests.slice(0, 12)
+
+  const scrollCarousel = (dir) => {
+    if (scrollRef.current) {
+      const scrollAmount = 380
+      scrollRef.current.scrollBy({ left: dir === 'left' ? -scrollAmount : scrollAmount, behavior: 'smooth' })
+    }
+  }
 
   return (
-    <section id="tests" className="py-16 bg-gray-50/50">
+    <section id="tests" className="py-16 bg-white">
       <div className="container mx-auto px-4">
+        {/* Title - Healthians style */}
         <div className="text-center mb-10">
-          <Badge className="bg-red-100 text-clinical hover:bg-red-100 mb-3">Book Now</Badge>
-          <h2 className="text-3xl lg:text-4xl font-bold text-gray-900">Book a Diagnostic Test</h2>
-          <p className="text-gray-500 mt-2 max-w-xl mx-auto">Choose from 500+ NABL accredited tests with home sample collection and reports in 6 hours</p>
+          <h2 className="text-3xl lg:text-4xl font-bold italic text-clinical">Health Scans & Imaging Tests</h2>
+          <p className="text-gray-500 mt-3 max-w-2xl mx-auto text-base">Choose from 500+ NABL accredited tests with free home sample collection and reports in 6 hours</p>
         </div>
 
-        <div className="flex flex-col sm:flex-row gap-3 mb-6">
-          <div className="relative flex-1 max-w-md">
+        {/* Search + Filters */}
+        <div className="flex flex-col sm:flex-row items-center gap-3 mb-6 max-w-2xl mx-auto">
+          <div className="relative flex-1 w-full">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
             <Input
               placeholder="Search tests... (e.g. CBC, Thyroid, Vitamin D)"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="pl-10 bg-white"
+              className="pl-10 bg-gray-50 border-gray-200 focus:border-clinical"
             />
           </div>
         </div>
 
-        <div className="flex gap-2 mb-8 overflow-x-auto pb-2 scrollbar-hide">
+        <div className="flex gap-2 mb-8 overflow-x-auto pb-2 scrollbar-hide justify-center">
           {categories.map(cat => (
             <button
               key={cat}
               onClick={() => { setActiveCategory(cat); setShowAll(false) }}
-              className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition ${
+              className={`px-5 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all duration-200 ${
                 activeCategory === cat
-                  ? 'bg-clinical text-white shadow-md'
-                  : 'bg-white text-gray-600 hover:bg-gray-100 border'
+                  ? 'bg-clinical text-white shadow-lg shadow-red-200'
+                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
               }`}
             >
               {cat}
@@ -533,98 +550,153 @@ function TestCatalog() {
         </div>
 
         {loading ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {[1,2,3,4].map(i => (
-              <div key={i} className="bg-white rounded-xl p-5 animate-pulse">
-                <div className="h-4 bg-gray-200 rounded w-3/4 mb-3"></div>
-                <div className="h-3 bg-gray-200 rounded w-full mb-2"></div>
-                <div className="h-3 bg-gray-200 rounded w-2/3 mb-4"></div>
-                <div className="h-8 bg-gray-200 rounded"></div>
+          <div className="flex gap-6 overflow-hidden">
+            {[1,2,3].map(i => (
+              <div key={i} className="min-w-[350px] bg-gray-50 rounded-2xl animate-pulse">
+                <div className="h-48 bg-gray-200 rounded-t-2xl"></div>
+                <div className="p-5">
+                  <div className="h-5 bg-gray-200 rounded w-3/4 mb-3"></div>
+                  <div className="h-4 bg-gray-200 rounded w-1/2 mb-3"></div>
+                  <div className="h-3 bg-gray-200 rounded w-full mb-2"></div>
+                  <div className="h-10 bg-gray-200 rounded mt-4"></div>
+                </div>
               </div>
             ))}
           </div>
         ) : (
           <>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              {displayTests.map(test => (
-                <Card key={test.id} className="group hover:shadow-lg transition-all duration-300 border-gray-100 overflow-hidden">
-                  <CardContent className="p-5">
-                    <div className="flex items-start justify-between mb-3">
-                      <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${test.fastingRequired ? 'bg-orange-50 text-orange-500' : 'bg-red-50 text-clinical'}`}>
-                        <TestIcon name={test.icon} />
-                      </div>
-                      {test.popular && (
-                        <Badge className="bg-yellow-50 text-yellow-700 hover:bg-yellow-50 text-[10px]">Popular</Badge>
-                      )}
-                    </div>
+            {/* Carousel Container */}
+            <div className="relative">
+              {/* Left Arrow */}
+              <button
+                onClick={() => scrollCarousel('left')}
+                className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 z-10 w-12 h-12 rounded-full bg-clinical text-white shadow-xl flex items-center justify-center hover:bg-red-700 transition-all duration-200 hidden lg:flex"
+              >
+                <ChevronRight className="w-6 h-6 rotate-180" />
+              </button>
 
-                    <h3 className="font-bold text-gray-900 text-sm leading-tight mb-1 group-hover:text-clinical transition">{test.name}</h3>
-                    <p className="text-xs text-gray-400 mb-3 line-clamp-2">{test.description}</p>
+              {/* Right Arrow */}
+              <button
+                onClick={() => scrollCarousel('right')}
+                className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 z-10 w-12 h-12 rounded-full bg-clinical text-white shadow-xl flex items-center justify-center hover:bg-red-700 transition-all duration-200 hidden lg:flex"
+              >
+                <ChevronRight className="w-6 h-6" />
+              </button>
 
-                    <div className="space-y-1.5 mb-4">
-                      <div className="flex items-center gap-1.5 text-xs text-gray-500">
-                        <Clock className="w-3.5 h-3.5 text-clinical" />
-                        <span>TAT: <strong>{test.tat}</strong></span>
-                      </div>
-                      <div className={`flex items-center gap-1.5 text-xs ${test.fastingRequired ? 'text-orange-600' : 'text-green-600'}`}>
-                        <CircleDot className="w-3.5 h-3.5" />
-                        <span className="font-medium">{test.fastingInfo}</span>
-                      </div>
-                      <div className="flex items-center gap-1.5 text-xs text-gray-500">
-                        <ClipboardList className="w-3.5 h-3.5 text-gray-400" />
-                        <span>{test.parameters} Parameters</span>
-                      </div>
-                    </div>
+              {/* Scrollable Card Row */}
+              <div
+                ref={scrollRef}
+                className="flex gap-6 overflow-x-auto pb-4 scrollbar-hide scroll-smooth snap-x snap-mandatory px-2"
+              >
+                {displayTests.map(test => {
+                  const gradient = categoryGradients[test.category] || 'from-red-500 to-red-700'
+                  const discount = Math.round((1 - test.price / test.originalPrice) * 100)
 
-                    <Separator className="mb-3" />
-
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <span className="text-lg font-extrabold text-gray-900">&#8377;{test.price}</span>
-                        <span className="text-xs text-gray-400 line-through ml-1.5">&#8377;{test.originalPrice}</span>
-                        <span className="text-xs text-lifegreen font-semibold ml-1">
-                          {Math.round((1 - test.price / test.originalPrice) * 100)}% off
-                        </span>
-                      </div>
-                    </div>
-
-                    <Button
-                      onClick={() => addToCart({ id: test.id, name: test.name, price: test.price, itemType: 'test' })}
-                      disabled={isInCart(test.id)}
-                      className={`w-full mt-3 text-sm font-semibold ${
-                        isInCart(test.id)
-                          ? 'bg-gray-100 text-gray-500 hover:bg-gray-100 cursor-default'
-                          : 'bg-lifegreen hover:bg-green-600 text-white shadow-sm'
-                      }`}
-                      size="sm"
+                  return (
+                    <div
+                      key={test.id}
+                      className="min-w-[340px] max-w-[340px] snap-start bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 group flex-shrink-0"
                     >
-                      {isInCart(test.id) ? (
-                        <span className="flex items-center gap-1.5"><CheckCircle className="w-4 h-4" /> Added to Cart</span>
-                      ) : (
-                        <span className="flex items-center gap-1.5"><ShoppingCart className="w-4 h-4" /> Add to Cart</span>
-                      )}
-                    </Button>
-                  </CardContent>
-                </Card>
-              ))}
+                      {/* Image/Visual Header Area */}
+                      <div className={`relative h-48 bg-gradient-to-br ${gradient} flex items-center justify-center overflow-hidden`}>
+                        <div className="absolute inset-0 opacity-10">
+                          <div className="absolute top-4 left-4 w-32 h-32 border border-white/30 rounded-full"></div>
+                          <div className="absolute bottom-4 right-4 w-24 h-24 border border-white/20 rounded-full"></div>
+                          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 border border-white/10 rounded-full"></div>
+                        </div>
+                        <div className="relative text-center">
+                          <div className="w-20 h-20 mx-auto bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-300">
+                            <TestIcon name={test.icon} className="w-10 h-10 text-white" />
+                          </div>
+                          <span className="text-white/80 text-xs font-medium tracking-wider uppercase">{test.category}</span>
+                        </div>
+                        {test.popular && (
+                          <div className="absolute top-3 right-3 bg-yellow-400 text-yellow-900 text-[10px] font-bold px-2.5 py-1 rounded-full shadow-lg">
+                            POPULAR
+                          </div>
+                        )}
+                        {discount > 0 && (
+                          <div className="absolute top-3 left-3 bg-white/90 backdrop-blur-sm text-clinical text-xs font-bold px-2.5 py-1 rounded-full shadow">
+                            {discount}% OFF
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Card Body */}
+                      <div className="p-5">
+                        <h3 className="font-bold text-gray-900 text-lg leading-tight mb-1 group-hover:text-clinical transition-colors">{test.name}</h3>
+                        
+                        {/* Pricing - Healthians style */}
+                        <div className="mb-3">
+                          <span className="text-clinical font-semibold text-base">Starting @ </span>
+                          <span className="text-gray-400 line-through text-sm">&#8377;{test.originalPrice}</span>
+                          <span className="text-clinical font-extrabold text-xl ml-1.5">&#8377;{test.price}</span>
+                        </div>
+
+                        <p className="text-sm text-gray-500 mb-4 line-clamp-2 leading-relaxed">{test.description}</p>
+
+                        {/* Salient Features */}
+                        <div className="space-y-2 mb-4">
+                          <p className="text-xs font-bold text-gray-700 uppercase tracking-wider">Salient Features</p>
+                          <div className="flex items-center gap-2 text-xs text-gray-600">
+                            <Clock className="w-3.5 h-3.5 text-clinical flex-shrink-0" />
+                            <span>Reports in <strong>{test.tat}</strong></span>
+                          </div>
+                          <div className={`flex items-center gap-2 text-xs ${test.fastingRequired ? 'text-orange-600' : 'text-green-600'}`}>
+                            <CircleDot className="w-3.5 h-3.5 flex-shrink-0" />
+                            <span className="font-medium">{test.fastingInfo}</span>
+                          </div>
+                          <div className="flex items-center gap-2 text-xs text-gray-600">
+                            <ClipboardList className="w-3.5 h-3.5 text-gray-400 flex-shrink-0" />
+                            <span>{test.parameters} Parameters covered</span>
+                          </div>
+                          {test.homeCollection && (
+                            <div className="flex items-center gap-2 text-xs text-teal-600">
+                              <Home className="w-3.5 h-3.5 flex-shrink-0" />
+                              <span className="font-medium">Free Home Collection</span>
+                            </div>
+                          )}
+                        </div>
+
+                        <Button
+                          onClick={() => addToCart({ id: test.id, name: test.name, price: test.price, itemType: 'test' })}
+                          disabled={isInCart(test.id)}
+                          className={`w-full text-sm font-bold rounded-xl py-5 ${
+                            isInCart(test.id)
+                              ? 'bg-gray-100 text-gray-500 hover:bg-gray-100 cursor-default'
+                              : 'bg-clinical hover:bg-red-700 text-white shadow-lg shadow-red-200'
+                          }`}
+                        >
+                          {isInCart(test.id) ? (
+                            <span className="flex items-center gap-2"><CheckCircle className="w-4 h-4" /> Added to Cart</span>
+                          ) : (
+                            <span className="flex items-center gap-2"><ShoppingCart className="w-4 h-4" /> Book Now <ArrowRight className="w-4 h-4" /></span>
+                          )}
+                        </Button>
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
             </div>
 
-            {filteredTests.length > 8 && !showAll && (
+            {/* View All Button */}
+            {filteredTests.length > 12 && !showAll && (
               <div className="text-center mt-8">
                 <Button
                   variant="outline"
                   onClick={() => setShowAll(true)}
-                  className="border-clinical text-clinical hover:bg-clinical hover:text-white"
+                  className="border-2 border-clinical text-clinical hover:bg-clinical hover:text-white rounded-full px-8 py-5 text-base font-semibold"
                 >
-                  View All {filteredTests.length} Tests <ChevronRight className="ml-1 w-4 h-4" />
+                  View All {filteredTests.length} Tests <ChevronRight className="ml-1 w-5 h-5" />
                 </Button>
               </div>
             )}
 
             {filteredTests.length === 0 && (
-              <div className="text-center py-12">
-                <Search className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-                <p className="text-gray-500">No tests found. Try a different search or category.</p>
+              <div className="text-center py-16">
+                <Search className="w-14 h-14 text-gray-300 mx-auto mb-4" />
+                <p className="text-gray-500 text-lg">No tests found. Try a different search or category.</p>
               </div>
             )}
           </>
@@ -1234,7 +1306,7 @@ function Footer() {
           <div>
             <h4 className="text-white font-semibold mb-4">Quick Links</h4>
             <ul className="space-y-2.5">
-              {['Home', 'Book a Test', 'Health Packages', 'Upload Prescription', 'Download Reports'].map(link => (
+              {['Home', 'Health Scans', 'Health Packages', 'Upload Prescription', 'Download Reports'].map(link => (
                 <li key={link}>
                   <button className="text-sm text-gray-400 hover:text-white transition">{link}</button>
                 </li>
