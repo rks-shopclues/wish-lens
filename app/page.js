@@ -707,16 +707,16 @@ function HealthPackages() {
 // ============ SERVICES SECTION ============
 function ServicesSection() {
   const services = [
-    { name: 'Blood Tests', image: 'https://images.pexels.com/photos/6285358/pexels-photo-6285358.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940', desc: '500+ diagnostic blood tests with NABL accredited reports' },
-    { name: 'X-Ray', image: 'https://images.unsplash.com/photo-1755526739866-c73f65b82f8e?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA2MDV8MHwxfHNlYXJjaHwxfHx4LXJheXxlbnwwfHx8fDE3NzYyODUyMDZ8MA&ixlib=rb-4.1.0&q=85', desc: 'Digital X-ray with instant results and expert radiologist reporting' },
-    { name: 'Ultrasound & Color Doppler', image: 'https://images.unsplash.com/photo-1691933880096-4046bc9e2fa0?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAxODF8MHwxfHNlYXJjaHwzfHx1bHRyYXNvdW5kfGVufDB8fHx8MTc3NjI4NTIxMHww&ixlib=rb-4.1.0&q=85', desc: 'Advanced ultrasound imaging with color Doppler technology' },
-    { name: 'ECG', image: 'https://images.unsplash.com/photo-1724395261682-c8b152dc5b9b?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2ODh8MHwxfHNlYXJjaHwxfHxFQ0d8ZW58MHx8fHwxNzc2Mjg1MjE0fDA&ixlib=rb-4.1.0&q=85', desc: 'Electrocardiogram for heart rhythm and electrical activity analysis' },
-    { name: 'TMT', image: 'https://images.pexels.com/photos/3845129/pexels-photo-3845129.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940', desc: 'Treadmill stress test for cardiac fitness and exercise tolerance' },
-    { name: 'Uroflowmetry', image: 'https://images.pexels.com/photos/13697729/pexels-photo-13697729.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940', desc: 'Non-invasive urine flow rate measurement for urological assessment' },
-    { name: 'Pulmonary Function Test', image: 'https://images.unsplash.com/photo-1516549655169-df83a0774514?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzNTl8MHwxfHNlYXJjaHwyfHxtZWRpY2FsJTIwZXF1aXBtZW50fGVufDB8fHx8MTc3NjI4NTIxOHww&ixlib=rb-4.1.0&q=85', desc: 'Comprehensive lung function and breathing capacity assessment' },
-    { name: 'Liver Fibroscan', image: 'https://images.unsplash.com/photo-1551076805-e1869033e561?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzNTl8MHwxfHNlYXJjaHw0fHxtZWRpY2FsJTIwZXF1aXBtZW50fGVufDB8fHx8MTc3NjI4NTIxOHww&ixlib=rb-4.1.0&q=85', desc: 'Non-invasive liver stiffness measurement for fibrosis detection' },
-    { name: 'NCV & EMG', image: 'https://images.pexels.com/photos/4966406/pexels-photo-4966406.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940', desc: 'Nerve conduction velocity and electromyography for nerve health' },
-    { name: 'EEG', image: 'https://images.unsplash.com/photo-1682706841281-f723c5bfcd83?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2ODh8MHwxfHNlYXJjaHwzfHxFQ0d8ZW58MHx8fHwxNzc2Mjg1MjE0fDA&ixlib=rb-4.1.0&q=85', desc: 'Electroencephalogram for brain electrical activity monitoring' },
+    { name: 'Blood Tests', image: 'https://images.unsplash.com/photo-1584516150909-c43483ee7932?auto=format&fit=crop&w=600&q=80', desc: '500+ diagnostic blood tests with NABL accredited reports' },
+    { name: 'X-Ray', image: 'https://images.unsplash.com/photo-1579154341098-e4e158cc7f55?auto=format&fit=crop&w=600&q=80', desc: 'Digital X-ray with instant results and expert radiologist reporting' },
+    { name: 'Ultrasound & Color Doppler', image: 'https://images.unsplash.com/photo-1579154341140-5aa3a445d43b?auto=format&fit=crop&w=600&q=80', desc: 'Advanced ultrasound imaging with color Doppler technology' },
+    { name: 'ECG', image: 'https://images.unsplash.com/photo-1631815587646-b85a1bb027e1?auto=format&fit=crop&w=600&q=80', desc: 'Electrocardiogram for heart rhythm and electrical activity analysis' },
+    { name: 'TMT', image: 'https://images.unsplash.com/photo-1568359730364-d3fad2a80b80?auto=format&fit=crop&w=600&q=80', desc: 'Treadmill stress test for cardiac fitness and exercise tolerance' },
+    { name: 'Uroflowmetry', image: 'https://images.unsplash.com/photo-1631217868264-e5b90bb7e133?auto=format&fit=crop&w=600&q=80', desc: 'Non-invasive urine flow rate measurement for urological assessment' },
+    { name: 'Pulmonary Function Test', image: 'https://images.unsplash.com/photo-1638202993928-7267aad84c31?auto=format&fit=crop&w=600&q=80', desc: 'Comprehensive lung function and breathing capacity assessment' },
+    { name: 'Liver Fibroscan', image: 'https://images.unsplash.com/photo-1758691461935-202e2ef6b69f?auto=format&fit=crop&w=600&q=80', desc: 'Non-invasive liver stiffness measurement for fibrosis detection' },
+    { name: 'NCV & EMG', image: 'https://images.pexels.com/photos/7579823/pexels-photo-7579823.jpeg?auto=compress&cs=tinysrgb&w=600', desc: 'Nerve conduction velocity and electromyography for nerve health' },
+    { name: 'EEG', image: 'https://images.pexels.com/photos/7578808/pexels-photo-7578808.jpeg?auto=compress&cs=tinysrgb&w=600', desc: 'Electroencephalogram for brain electrical activity monitoring' },
   ]
 
   return (
@@ -724,8 +724,8 @@ function ServicesSection() {
       <div className="container mx-auto px-4">
         <div className="text-center mb-10">
           <Badge className="bg-purple-100 text-purple-700 hover:bg-purple-100 mb-3">Our Services</Badge>
-          <h2 className="text-3xl lg:text-4xl font-bold text-gray-900">Diagnostic Services</h2>
-          <p className="text-gray-500 mt-2 max-w-xl mx-auto">Comprehensive range of diagnostic services under one roof with state-of-the-art equipment</p>
+          <h2 className="text-3xl lg:text-4xl font-bold text-gray-900">Health Scans and Imaging Tests</h2>
+          <p className="text-gray-500 mt-2 max-w-xl mx-auto">Comprehensive range of health scans and imaging services under one roof with state-of-the-art equipment</p>
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
