@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, createContext, useContext, useRef } from 'react'
+import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
@@ -95,7 +96,6 @@ const TestIcon = ({ name, className = "w-5 h-5" }) => {
 // ============ HEADER ============
 function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const [showLogin, setShowLogin] = useState(false)
 
   const scrollTo = (id) => {
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
@@ -120,7 +120,7 @@ function Header() {
             </a>
             <div className="flex items-center gap-3 text-xs">
               <span className="hidden md:flex items-center gap-1">
-                <MapPin className="w-3.5 h-3.5" /> New Delhi &bull; 5 Centers
+                <Truck className="w-3.5 h-3.5" /> Home Collection in Entire Delhi NCR
               </span>
               <span className="hidden md:inline text-red-200">|</span>
               <span className="flex items-center gap-1">
@@ -145,7 +145,6 @@ function Header() {
                 { label: 'Home', id: 'home' },
                 { label: 'Book a Test', id: 'tests' },
                 { label: 'Health Packages', id: 'packages' },
-                { label: 'Investor Desk', id: 'investor-desk' },
               ].map(item => (
                 <button
                   key={item.id}
@@ -155,18 +154,26 @@ function Header() {
                   {item.label}
                 </button>
               ))}
+              <Link
+                href="/investor-desk"
+                className="px-3 py-2 text-sm font-medium text-gray-600 hover:text-clinical hover:bg-red-50 rounded-lg transition"
+              >
+                Investor Desk
+              </Link>
               <button
                 onClick={() => scrollTo('prescription')}
                 className="ml-1 bg-lifegreen text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-green-600 transition flex items-center gap-1.5"
               >
                 <Upload className="w-4 h-4" /> Upload Prescription
               </button>
-              <button
-                onClick={() => setShowLogin(true)}
+              <a
+                href={getWhatsAppGenericUrl("Hi, I'd like to download my test reports")}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="ml-1 px-3 py-2 text-sm font-medium text-gray-600 hover:text-clinical hover:bg-red-50 rounded-lg transition flex items-center gap-1.5"
               >
                 <Download className="w-4 h-4" /> Reports
-              </button>
+              </a>
             </nav>
 
             <div className="flex items-center gap-2">
@@ -194,7 +201,6 @@ function Header() {
                 { label: 'Book a Test', id: 'tests' },
                 { label: 'Health Packages', id: 'packages' },
                 { label: 'Upload Prescription', id: 'prescription' },
-                { label: 'Investor Desk', id: 'investor-desk' },
               ].map(item => (
                 <button
                   key={item.id}
@@ -204,17 +210,26 @@ function Header() {
                   {item.label}
                 </button>
               ))}
-              <button
-                onClick={() => { setShowLogin(true); setMobileMenuOpen(false) }}
+              <Link
+                href="/investor-desk"
+                onClick={() => setMobileMenuOpen(false)}
+                className="block w-full text-left py-2.5 px-3 text-gray-700 hover:bg-gray-50 rounded-lg"
+              >
+                Investor Desk
+              </Link>
+              <a
+                href={getWhatsAppGenericUrl("Hi, I'd like to download my test reports")}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => setMobileMenuOpen(false)}
                 className="block w-full text-left py-2.5 px-3 text-gray-700 hover:bg-gray-50 rounded-lg"
               >
                 Download Reports
-              </button>
+              </a>
             </div>
           )}
         </div>
       </header>
-      <OTPDialog open={showLogin} onOpenChange={setShowLogin} />
     </>
   )
 }
@@ -256,7 +271,7 @@ function HeroSection() {
         <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
           <div className="space-y-6">
             <Badge className="bg-red-100 text-clinical hover:bg-red-100 text-sm px-3 py-1.5 font-medium">
-              <Shield className="w-3.5 h-3.5 mr-1.5" /> NABL Accredited &bull; ISO 15189 Certified
+              <Shield className="w-3.5 h-3.5 mr-1.5" /> NABL Accredited &bull; CGHS Empanelled
             </Badge>
 
             <h2 className="text-4xl lg:text-5xl xl:text-[3.5rem] font-extrabold text-gray-900 leading-[1.1] tracking-tight">
@@ -292,7 +307,7 @@ function HeroSection() {
             <div className="flex flex-wrap items-center gap-4 pt-2">
               {[
                 { icon: Award, label: 'NABL', color: 'text-yellow-500' },
-                { icon: BadgeCheck, label: 'ISO 15189', color: 'text-clinical' },
+                { icon: BadgeCheck, label: 'CGHS Empanelled', color: 'text-blue-600' },
                 { icon: Shield, label: 'BSE-SME Listed', color: 'text-green-500' },
               ].map((badge, i) => (
                 <div key={i} className="flex items-center gap-1.5 text-sm text-gray-500">
@@ -398,17 +413,17 @@ function TrustBadges() {
       <div className="container mx-auto px-4">
         <div className="flex flex-wrap justify-center items-center gap-6 lg:gap-12">
           {[
-            { icon: Clock, text: 'Reports in 6 Hours', color: 'text-clinical' },
-            { icon: Truck, text: 'Free Home Collection', color: 'text-lifegreen' },
-            { icon: Award, text: 'NABL Accredited', color: 'text-yellow-600' },
-            { icon: Stethoscope, text: 'Doctor Supervised', color: 'text-red-500' },
-            { icon: BadgeCheck, text: 'CGHS Empanelled', color: 'text-clinical' },
+            { icon: Clock, text: 'Reports in 6 Hours', color: 'text-clinical', highlight: false },
+            { icon: Truck, text: 'Free Home Collection', color: 'text-lifegreen', highlight: false },
+            { icon: Award, text: 'NABL Accredited', color: 'text-yellow-600', highlight: false },
+            { icon: Stethoscope, text: 'Doctor Supervised', color: 'text-red-500', highlight: false },
+            { icon: BadgeCheck, text: 'CGHS Empanelled', color: 'text-blue-700', highlight: true },
           ].map((item, i) => (
-            <div key={i} className="flex items-center gap-2 text-gray-600">
-              <div className={`w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center ${item.color}`}>
+            <div key={i} className={`flex items-center gap-2 ${item.highlight ? 'bg-blue-50 border border-blue-200 rounded-full px-4 py-1.5' : 'text-gray-600'}`}>
+              <div className={`w-8 h-8 rounded-full ${item.highlight ? 'bg-blue-100' : 'bg-gray-50'} flex items-center justify-center ${item.color}`}>
                 <item.icon className="w-4 h-4" />
               </div>
-              <span className="text-sm font-medium">{item.text}</span>
+              <span className={`text-sm font-semibold ${item.highlight ? 'text-blue-700' : 'text-gray-600 font-medium'}`}>{item.text}</span>
             </div>
           ))}
         </div>
@@ -707,16 +722,16 @@ function HealthPackages() {
 // ============ SERVICES SECTION ============
 function ServicesSection() {
   const services = [
-    { name: 'Blood Tests', image: 'https://images.unsplash.com/photo-1584516150909-c43483ee7932?auto=format&fit=crop&w=600&q=80', desc: '500+ diagnostic blood tests with NABL accredited reports' },
-    { name: 'X-Ray', image: 'https://images.unsplash.com/photo-1579154341098-e4e158cc7f55?auto=format&fit=crop&w=600&q=80', desc: 'Digital X-ray with instant results and expert radiologist reporting' },
-    { name: 'Ultrasound & Color Doppler', image: 'https://images.unsplash.com/photo-1579154341140-5aa3a445d43b?auto=format&fit=crop&w=600&q=80', desc: 'Advanced ultrasound imaging with color Doppler technology' },
-    { name: 'ECG', image: 'https://images.unsplash.com/photo-1631815587646-b85a1bb027e1?auto=format&fit=crop&w=600&q=80', desc: 'Electrocardiogram for heart rhythm and electrical activity analysis' },
-    { name: 'TMT', image: 'https://images.unsplash.com/photo-1568359730364-d3fad2a80b80?auto=format&fit=crop&w=600&q=80', desc: 'Treadmill stress test for cardiac fitness and exercise tolerance' },
+    { name: 'Blood Tests', image: 'https://images.unsplash.com/photo-1631217868204-db1ed6bdd224?auto=format&fit=crop&w=600&q=80', desc: '500+ diagnostic blood tests with NABL accredited reports' },
+    { name: 'X-Ray', image: 'https://images.unsplash.com/photo-1758691461957-13aff0c37c6f?auto=format&fit=crop&w=600&q=80', desc: 'Digital X-ray with instant results and expert radiologist reporting' },
+    { name: 'Ultrasound & Color Doppler', image: 'https://images.unsplash.com/photo-1691933880096-4046bc9e2fa0?auto=format&fit=crop&w=600&q=80', desc: 'Advanced ultrasound imaging with color Doppler technology' },
+    { name: 'ECG', image: 'https://images.unsplash.com/photo-1631558554226-fb65b25aa939?auto=format&fit=crop&w=600&q=80', desc: 'Electrocardiogram for heart rhythm and electrical activity analysis' },
+    { name: 'TMT', image: 'https://images.unsplash.com/photo-1596354762473-6706bf6d5626?auto=format&fit=crop&w=600&q=80', desc: 'Treadmill stress test for cardiac fitness and exercise tolerance' },
     { name: 'Uroflowmetry', image: 'https://images.unsplash.com/photo-1631217868264-e5b90bb7e133?auto=format&fit=crop&w=600&q=80', desc: 'Non-invasive urine flow rate measurement for urological assessment' },
-    { name: 'Pulmonary Function Test', image: 'https://images.unsplash.com/photo-1638202993928-7267aad84c31?auto=format&fit=crop&w=600&q=80', desc: 'Comprehensive lung function and breathing capacity assessment' },
-    { name: 'Liver Fibroscan', image: 'https://images.unsplash.com/photo-1758691461935-202e2ef6b69f?auto=format&fit=crop&w=600&q=80', desc: 'Non-invasive liver stiffness measurement for fibrosis detection' },
+    { name: 'Pulmonary Function Test', image: 'https://images.unsplash.com/photo-1758691461916-dc7894eb8f94?auto=format&fit=crop&w=600&q=80', desc: 'Comprehensive lung function and breathing capacity assessment' },
+    { name: 'Liver Fibroscan', image: 'https://images.unsplash.com/photo-1758691461957-474a7686e388?auto=format&fit=crop&w=600&q=80', desc: 'Non-invasive liver stiffness measurement for fibrosis detection' },
     { name: 'NCV & EMG', image: 'https://images.pexels.com/photos/7579823/pexels-photo-7579823.jpeg?auto=compress&cs=tinysrgb&w=600', desc: 'Nerve conduction velocity and electromyography for nerve health' },
-    { name: 'EEG', image: 'https://images.pexels.com/photos/7578808/pexels-photo-7578808.jpeg?auto=compress&cs=tinysrgb&w=600', desc: 'Electroencephalogram for brain electrical activity monitoring' },
+    { name: 'EEG', image: 'https://images.unsplash.com/photo-1656337426953-554b8e5b50f5?auto=format&fit=crop&w=600&q=80', desc: 'Electroencephalogram for brain electrical activity monitoring' },
   ]
 
   return (
@@ -933,11 +948,11 @@ function PrescriptionUpload() {
 // ============ WHY CHOOSE US ============
 function WhyChooseUs() {
   const features = [
+    { icon: BadgeCheck, title: 'CGHS Empanelled', desc: 'Empanelled under Central Government Health Scheme. Trusted by government employees and pensioners for quality diagnostics.', color: 'bg-blue-50 text-blue-600', highlight: true },
     { icon: Award, title: 'NABL Accredited', desc: 'Highest quality standards certified by National Accreditation Board for Testing and Calibration Laboratories.', color: 'bg-yellow-50 text-yellow-600' },
     { icon: Clock, title: 'Reports in 6 Hours', desc: 'Fast turnaround time with real-time tracking. Most reports delivered within 6 hours of sample collection.', color: 'bg-red-50 text-clinical' },
     { icon: Stethoscope, title: 'Doctor Supervised', desc: 'Every report is verified and signed by qualified pathologists under Dr Lalchandani\'s supervision.', color: 'bg-red-50 text-red-500' },
     { icon: Truck, title: 'Free Home Collection', desc: 'Trained phlebotomists come to your doorstep. Free collection across all Delhi NCR locations.', color: 'bg-green-50 text-lifegreen' },
-    { icon: Shield, title: 'Data Privacy (DPDP)', desc: 'Your health data is protected under DPDP Act 2023 with strict consent-based data processing.', color: 'bg-purple-50 text-purple-500' },
     { icon: Users, title: '40 Years of Trust', desc: 'Serving 20 lakh+ patients since 1986. A legacy of accuracy, reliability, and patient care.', color: 'bg-orange-50 text-orange-500' },
   ]
 
@@ -952,12 +967,12 @@ function WhyChooseUs() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {features.map((feat, i) => (
-            <Card key={i} className="border-gray-100 hover:shadow-lg transition-all duration-300 group">
+            <Card key={i} className={`hover:shadow-lg transition-all duration-300 group ${feat.highlight ? 'border-2 border-blue-300 bg-blue-50/30 ring-1 ring-blue-100' : 'border-gray-100'}`}>
               <CardContent className="p-6">
                 <div className={`w-12 h-12 rounded-xl ${feat.color} flex items-center justify-center mb-4 group-hover:scale-110 transition`}>
                   <feat.icon className="w-6 h-6" />
                 </div>
-                <h3 className="font-bold text-gray-900 text-lg mb-2">{feat.title}</h3>
+                <h3 className={`font-bold text-lg mb-2 ${feat.highlight ? 'text-blue-700' : 'text-gray-900'}`}>{feat.title}</h3>
                 <p className="text-sm text-gray-500 leading-relaxed">{feat.desc}</p>
               </CardContent>
             </Card>
@@ -1029,9 +1044,9 @@ function CTASection() {
               Book on WhatsApp
             </Button>
           </a>
-          <a href="tel:7669989614">
+          <a href="tel:8010689689">
             <Button className="bg-white text-clinical hover:bg-gray-100 font-bold text-lg px-8 py-6">
-              <PhoneCall className="mr-2 w-5 h-5" /> Call 76699-89614
+              <PhoneCall className="mr-2 w-5 h-5" /> Call 80-10-689-689
             </Button>
           </a>
         </div>
@@ -1043,120 +1058,6 @@ function CTASection() {
         <div className="mt-8 flex justify-center items-center gap-2 text-red-200 text-sm">
           <Shield className="w-4 h-4" />
           <span>ABDM Ready &bull; Link your ABHA ID for seamless health records</span>
-        </div>
-      </div>
-    </section>
-  )
-}
-
-// ============ INVESTOR DESK ============
-function InvestorDesk() {
-  const [activeTab, setActiveTab] = useState('Announcements')
-
-  const categories = {
-    'Announcements': [
-      { name: 'Voting Results AGM 2025', url: 'https://lalchandanipathlab.com/assets/website/pdf/1.Announcements/1.%20Voting%20Results%20AGM%202025.pdf' },
-      { name: 'Proceedings AGM 2025', url: 'https://lalchandanipathlab.com/assets/website/pdf/1.Announcements/2.%20Proceedings%20AGM%202025.pdf' },
-      { name: 'Book Closure AGM 2025', url: 'https://lalchandanipathlab.com/assets/website/pdf/1.Announcements/3%20Book%20Closure%20AGM%202025.pdf' },
-      { name: 'Outcome BM 05.09.2025', url: 'https://lalchandanipathlab.com/assets/website/pdf/1.Announcements/4.%20Outcome%20BM%2005.09.2025.pdf' },
-      { name: 'Audited Results March 2025', url: 'https://lalchandanipathlab.com/assets/website/pdf/1.Announcements/5.%20Audited%20Results%20March%202025.pdf' },
-      { name: 'Appointment of CS Saniya Hussain', url: 'https://lalchandanipathlab.com/assets/website/pdf/1.Announcements/6.%20Appointment%20of%20CS_Saniya%20Hussain.pdf' },
-    ],
-    'Financial Results': [
-      { name: 'Unaudited Results Sep 2025', url: 'https://lalchandanipathlab.com/assets/website/pdf/4.Financial%20Results/Unaudited%20Results%20September%202025.pdf' },
-      { name: 'Audited Results March 2025', url: 'https://lalchandanipathlab.com/assets/website/pdf/4.Financial%20Results/1.%20Audited%20Results%20March%202025.pdf' },
-      { name: 'Unaudited Results 30.09.2024', url: 'https://lalchandanipathlab.com/assets/website/pdf/4.Financial%20Results/2.%20Unaudited%20Results_30.09.2024.pdf' },
-      { name: 'Audited Results March 2024', url: 'https://lalchandanipathlab.com/assets/website/pdf/4.Financial%20Results/3.%20Audited%20Results%20March%202024.pdf' },
-      { name: 'Unaudited Results 30.09.2023', url: 'https://lalchandanipathlab.com/assets/website/pdf/4.Financial%20Results/4.%20Unaudited%20Results%2030.09.2023.pdf' },
-      { name: 'Audited Results March 2023', url: 'https://lalchandanipathlab.com/assets/website/pdf/4.Financial%20Results/5.%20Audited%20Results%20March%202023.pdf' },
-    ],
-    'Annual Reports': [
-      { name: 'Annual Report 2025', url: 'https://lalchandanipathlab.com/assets/website/pdf/6.Notice%20and%20Annual%20Reports/16.%20Annual%20Report%202025.pdf' },
-      { name: 'Annual Report 2024', url: 'https://lalchandanipathlab.com/assets/website/pdf/6.Notice%20and%20Annual%20Reports/14.%20Annual%20Report%202024.pdf' },
-      { name: 'Notice 2024', url: 'https://lalchandanipathlab.com/assets/website/pdf/6.Notice%20and%20Annual%20Reports/13.Notice%202024.pdf' },
-      { name: 'Annual Report 2023', url: 'https://lalchandanipathlab.com/assets/website/pdf/6.Notice%20and%20Annual%20Reports/12.%20Annual%20Report%202023.pdf' },
-      { name: 'Annual Report 2022', url: 'https://lalchandanipathlab.com/assets/website/pdf/6.Notice%20and%20Annual%20Reports/10.%20Annual%20Report%202022.pdf' },
-      { name: 'Annual Report 2021', url: 'https://lalchandanipathlab.com/assets/website/pdf/6.Notice%20and%20Annual%20Reports/8.%20Annual%20Report%202021.pdf' },
-    ],
-    'Corporate Governance': [
-      { name: 'CG Non Applicability Dec 2025', url: 'https://lalchandanipathlab.com/assets/website/pdf/CG%20NON%20Applicability%20december%202025.pdf' },
-      { name: 'CG Non Applicability Sep 2025', url: 'https://lalchandanipathlab.com/assets/website/pdf/3.Corporate%20Governance/10.CG%20Non-applicability%20Sep%202025.pdf' },
-      { name: 'CG Non Applicability June 2025', url: 'https://lalchandanipathlab.com/assets/website/pdf/3.Corporate%20Governance/9.CG%20Non-applicability%20June%202025.pdf' },
-      { name: 'CG Non Applicability March 2025', url: 'https://lalchandanipathlab.com/assets/website/pdf/3.Corporate%20Governance/8.CG%20Non-applicability%20March%202025.pdf' },
-    ],
-    'Shareholding': [
-      { name: 'Shareholding Pattern Sep 2025', url: 'https://lalchandanipathlab.com/assets/website/pdf/10.Shareholding%20pattern/SHP/September%202025.pdf' },
-      { name: 'Shareholding Pattern March 2025', url: 'https://lalchandanipathlab.com/assets/website/pdf/10.Shareholding%20pattern/SHP/March%202025.pdf' },
-      { name: 'Shareholding Pattern Sep 2024', url: 'https://lalchandanipathlab.com/assets/website/pdf/10.Shareholding%20pattern/SHP/September%202024.pdf' },
-      { name: 'Shareholding Pattern March 2024', url: 'https://lalchandanipathlab.com/assets/website/pdf/10.Shareholding%20pattern/SHP/March%202024.pdf' },
-    ],
-    'Policies': [
-      { name: 'Familarization Policy', url: 'https://lalchandanipathlab.com/assets/website/pdf/policies/familarization-policy.pdf' },
-      { name: 'DDP', url: 'https://lalchandanipathlab.com/assets/website/pdf/policies/DDP.pdf' },
-      { name: 'RPT Policy', url: 'https://lalchandanipathlab.com/assets/website/pdf/policies/RPT%20policy.pdf' },
-      { name: 'Vigil Mechanism Policy', url: 'https://lalchandanipathlab.com/assets/website/pdf/policies/Vigil%20Mechanism%20Policy.pdf' },
-      { name: 'Code of Conduct', url: 'https://lalchandanipathlab.com/assets/website/pdf/policies/Code_of_Conduct_for_Directors_&_Senior_Management.pdf' },
-      { name: 'Materiality Policy', url: 'https://lalchandanipathlab.com/assets/website/pdf/policies/Materiality%20Policy.pdf' },
-    ],
-  }
-
-  const tabs = Object.keys(categories)
-
-  return (
-    <section id="investor-desk" className="py-16 bg-gray-50/50">
-      <div className="container mx-auto px-4">
-        <div className="text-center mb-10">
-          <Badge className="bg-clinical/10 text-clinical hover:bg-clinical/10 mb-3">BSE-SME Listed</Badge>
-          <h2 className="text-3xl lg:text-4xl font-bold text-gray-900">Investor Desk</h2>
-          <p className="text-gray-500 mt-2 max-w-xl mx-auto">Access financial reports, announcements, and corporate governance documents</p>
-        </div>
-
-        <div className="flex gap-2 mb-6 overflow-x-auto pb-2">
-          {tabs.map(tab => (
-            <button
-              key={tab}
-              onClick={() => setActiveTab(tab)}
-              className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition ${
-                activeTab === tab
-                  ? 'bg-clinical text-white shadow-md'
-                  : 'bg-white text-gray-600 hover:bg-gray-100 border'
-              }`}
-            >
-              {tab}
-            </button>
-          ))}
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-          {categories[activeTab]?.map((doc, i) => (
-            <a
-              key={i}
-              href={doc.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-3 p-4 bg-white rounded-xl border border-gray-100 hover:border-clinical/30 hover:shadow-md transition-all group"
-            >
-              <div className="w-10 h-10 bg-red-50 rounded-lg flex items-center justify-center shrink-0 group-hover:bg-clinical group-hover:text-white transition">
-                <FileText className="w-5 h-5 text-clinical group-hover:text-white" />
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-semibold text-gray-900 truncate group-hover:text-clinical transition">{doc.name}</p>
-                <p className="text-[10px] text-gray-400">PDF Document</p>
-              </div>
-              <Download className="w-4 h-4 text-gray-300 group-hover:text-clinical transition shrink-0" />
-            </a>
-          ))}
-        </div>
-
-        <div className="text-center mt-6">
-          <a
-            href="https://lalchandanipathlab.com/investordesk"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 text-clinical font-semibold text-sm hover:underline"
-          >
-            View All Documents on Investor Desk <ChevronRight className="w-4 h-4" />
-          </a>
         </div>
       </div>
     </section>
@@ -1179,7 +1080,7 @@ function Footer() {
             </p>
             <div className="flex items-center gap-3">
               <Badge className="bg-yellow-900/30 text-yellow-400 hover:bg-yellow-900/30">NABL</Badge>
-              <Badge className="bg-red-900/30 text-red-400 hover:bg-red-900/30">ISO 15189</Badge>
+              <Badge className="bg-red-900/30 text-red-400 hover:bg-red-900/30">CGHS</Badge>
               <Badge className="bg-green-900/30 text-green-400 hover:bg-green-900/30">BSE-SME</Badge>
             </div>
           </div>
@@ -1209,8 +1110,8 @@ function Footer() {
           <div>
             <h4 className="text-white font-semibold mb-4">Contact Us</h4>
             <div className="space-y-3">
-              <a href="tel:7669989614" className="flex items-center gap-2 text-sm text-gray-400 hover:text-white transition">
-                <Phone className="w-4 h-4 text-clinical" /> 76699-89614
+              <a href="tel:8010689689" className="flex items-center gap-2 text-sm text-gray-400 hover:text-white transition">
+                <Phone className="w-4 h-4 text-clinical" /> 80-10-689-689
               </a>
               <div className="flex items-start gap-2 text-sm text-gray-400">
                 <MapPin className="w-4 h-4 text-clinical shrink-0 mt-0.5" />
@@ -1433,7 +1334,7 @@ function MobileStickyBar() {
           <WhatsAppIcon className="w-4 h-4" /> Book Now
         </a>
         <a
-          href="tel:7669989614"
+          href="tel:8010689689"
           className="flex-1 flex items-center justify-center gap-1.5 bg-lifegreen hover:bg-green-600 text-white py-2.5 rounded-xl font-semibold text-sm"
         >
           <PhoneCall className="w-4 h-4" /> Call Now
@@ -1461,7 +1362,6 @@ export default function App() {
           <HowItWorks />
           <PrescriptionUpload />
           <WhyChooseUs />
-          <InvestorDesk />
           <CTASection />
         </main>
         <Footer />
