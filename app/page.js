@@ -714,6 +714,17 @@ function HealthPackages() {
             ))}
           </div>
         )}
+
+        {/* View All Tests Button */}
+        <div className="text-center mt-10">
+          <Link
+            href="/all-tests"
+            className="inline-flex items-center gap-2 bg-clinical hover:bg-red-700 text-white font-bold text-base px-8 py-4 rounded-xl shadow-lg hover:shadow-xl transition-all"
+          >
+            View All Tests <ChevronRight className="w-5 h-5" />
+          </Link>
+          <p className="text-gray-400 text-xs mt-2">Browse our complete catalog of 70+ diagnostic tests & imaging services</p>
+        </div>
       </div>
     </section>
   )
