@@ -936,6 +936,11 @@ function PhotoGallery() {
     { src: '/gallery/dr-lalchandani-chamber.jpg', caption: 'Dr A Lalchandani Chamber' },
     { src: '/gallery/immunoassay-dept.jpg', caption: 'Immunoassay & Biochemistry Department' },
     { src: '/gallery/conference-room.jpg', caption: 'Conference Room & VIP Seating' },
+    { src: '/gallery/centre-panoramic-view.jpg', caption: 'Overall Centre View (Panoramic)' },
+    { src: '/gallery/physician-examination-room.jpg', caption: 'Physician - Medical Examination Room' },
+    { src: '/gallery/reception-view.jpg', caption: 'Reception Area' },
+    { src: '/gallery/ultrasound-room.jpg', caption: 'Ultrasound Room & Medical Examination' },
+    { src: '/gallery/lab-image-3.jpg', caption: 'Laboratory - Diagnostic Equipment' },
   ]
 
   useEffect(() => {
