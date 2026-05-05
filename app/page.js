@@ -1336,9 +1336,9 @@ export default function App() {
           <HowItWorks />
           <PrescriptionUpload />
           <WhyChooseUs />
+          <PhotoGallery />
           <CTASection />
         </main>
-        <PhotoGallery />
         <Footer />
         <WhatsAppButton />
         <MobileStickyBar />
