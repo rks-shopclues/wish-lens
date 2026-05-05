@@ -143,7 +143,6 @@ function Header() {
             <nav className="hidden lg:flex items-center gap-1">
               {[
                 { label: 'Home', id: 'home' },
-                { label: 'Book a Test', id: 'tests' },
                 { label: 'Health Packages', id: 'packages' },
               ].map(item => (
                 <button
@@ -154,6 +153,12 @@ function Header() {
                   {item.label}
                 </button>
               ))}
+              <Link
+                href="/all-tests"
+                className="px-3 py-2 text-sm font-medium text-gray-600 hover:text-clinical hover:bg-red-50 rounded-lg transition"
+              >
+                All Tests
+              </Link>
               <Link
                 href="/investor-desk"
                 className="px-3 py-2 text-sm font-medium text-gray-600 hover:text-clinical hover:bg-red-50 rounded-lg transition"
@@ -198,7 +203,6 @@ function Header() {
             <div className="lg:hidden mt-3 pb-3 border-t pt-3 space-y-1 animate-fade-in">
               {[
                 { label: 'Home', id: 'home' },
-                { label: 'Book a Test', id: 'tests' },
                 { label: 'Health Packages', id: 'packages' },
                 { label: 'Upload Prescription', id: 'prescription' },
               ].map(item => (
@@ -210,6 +214,13 @@ function Header() {
                   {item.label}
                 </button>
               ))}
+              <Link
+                href="/all-tests"
+                onClick={() => setMobileMenuOpen(false)}
+                className="block w-full text-left py-2.5 px-3 text-gray-700 hover:bg-gray-50 rounded-lg"
+              >
+                All Tests
+              </Link>
               <Link
                 href="/investor-desk"
                 onClick={() => setMobileMenuOpen(false)}
@@ -433,171 +444,6 @@ function TrustBadges() {
 }
 
 // ============ TEST CATALOG ============
-function TestCatalog() {
-  const [tests, setTests] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [search, setSearch] = useState('')
-  const [activeCategory, setActiveCategory] = useState('All')
-  const [showAll, setShowAll] = useState(false)
-
-  const categories = ['All', 'Haematology', 'Biochemistry', 'Endocrinology', 'Diabetology', 'Clinical Pathology', 'Immunology']
-
-  useEffect(() => {
-    fetchTests()
-  }, [])
-
-  const fetchTests = async () => {
-    try {
-      // First try to seed
-      await fetch('/api/seed', { method: 'POST' })
-      const res = await fetch('/api/tests')
-      const data = await res.json()
-      setTests(data.tests || [])
-    } catch (e) {
-      console.error('Failed to fetch tests', e)
-    }
-    setLoading(false)
-  }
-
-  const filteredTests = tests.filter(test => {
-    const matchesCategory = activeCategory === 'All' || test.category === activeCategory
-    const matchesSearch = !search || test.name.toLowerCase().includes(search.toLowerCase()) || test.shortName?.toLowerCase().includes(search.toLowerCase())
-    return matchesCategory && matchesSearch
-  })
-
-  const displayTests = showAll ? filteredTests : filteredTests.slice(0, 8)
-
-  return (
-    <section id="tests" className="py-16 bg-gray-50/50">
-      <div className="container mx-auto px-4">
-        <div className="text-center mb-10">
-          <Badge className="bg-red-100 text-clinical hover:bg-red-100 mb-3">Book Now</Badge>
-          <h2 className="text-3xl lg:text-4xl font-bold text-gray-900">Book a Diagnostic Test</h2>
-          <p className="text-gray-500 mt-2 max-w-xl mx-auto">Choose from 500+ NABL accredited tests with home sample collection and reports in 6 hours</p>
-        </div>
-
-        <div className="flex flex-col sm:flex-row gap-3 mb-6">
-          <div className="relative flex-1 max-w-md">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-            <Input
-              placeholder="Search tests... (e.g. CBC, Thyroid, Vitamin D)"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="pl-10 bg-white"
-            />
-          </div>
-        </div>
-
-        <div className="flex gap-2 mb-8 overflow-x-auto pb-2 scrollbar-hide">
-          {categories.map(cat => (
-            <button
-              key={cat}
-              onClick={() => { setActiveCategory(cat); setShowAll(false) }}
-              className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition ${
-                activeCategory === cat
-                  ? 'bg-clinical text-white shadow-md'
-                  : 'bg-white text-gray-600 hover:bg-gray-100 border'
-              }`}
-            >
-              {cat}
-            </button>
-          ))}
-        </div>
-
-        {loading ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {[1,2,3,4].map(i => (
-              <div key={i} className="bg-white rounded-xl p-5 animate-pulse">
-                <div className="h-4 bg-gray-200 rounded w-3/4 mb-3"></div>
-                <div className="h-3 bg-gray-200 rounded w-full mb-2"></div>
-                <div className="h-3 bg-gray-200 rounded w-2/3 mb-4"></div>
-                <div className="h-8 bg-gray-200 rounded"></div>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              {displayTests.map(test => (
-                <Card key={test.id} className="group hover:shadow-lg transition-all duration-300 border-gray-100 overflow-hidden">
-                  <CardContent className="p-5">
-                    <div className="flex items-start justify-between mb-3">
-                      <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${test.fastingRequired ? 'bg-orange-50 text-orange-500' : 'bg-red-50 text-clinical'}`}>
-                        <TestIcon name={test.icon} />
-                      </div>
-                      {test.popular && (
-                        <Badge className="bg-yellow-50 text-yellow-700 hover:bg-yellow-50 text-[10px]">Popular</Badge>
-                      )}
-                    </div>
-
-                    <h3 className="font-bold text-gray-900 text-sm leading-tight mb-1 group-hover:text-clinical transition">{test.name}</h3>
-                    <p className="text-xs text-gray-400 mb-3 line-clamp-2">{test.description}</p>
-
-                    <div className="space-y-1.5 mb-4">
-                      <div className="flex items-center gap-1.5 text-xs text-gray-500">
-                        <Clock className="w-3.5 h-3.5 text-clinical" />
-                        <span>TAT: <strong>{test.tat}</strong></span>
-                      </div>
-                      <div className={`flex items-center gap-1.5 text-xs ${test.fastingRequired ? 'text-orange-600' : 'text-green-600'}`}>
-                        <CircleDot className="w-3.5 h-3.5" />
-                        <span className="font-medium">{test.fastingInfo}</span>
-                      </div>
-                      <div className="flex items-center gap-1.5 text-xs text-gray-500">
-                        <ClipboardList className="w-3.5 h-3.5 text-gray-400" />
-                        <span>{test.parameters} Parameters</span>
-                      </div>
-                    </div>
-
-                    <Separator className="mb-3" />
-
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <span className="text-lg font-extrabold text-gray-900">&#8377;{test.price}</span>
-                        <span className="text-xs text-gray-400 line-through ml-1.5">&#8377;{test.originalPrice}</span>
-                        <span className="text-xs text-lifegreen font-semibold ml-1">
-                          {Math.round((1 - test.price / test.originalPrice) * 100)}% off
-                        </span>
-                      </div>
-                    </div>
-
-                    <a
-                      href={getWhatsAppUrl(test.name)}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="w-full mt-3 text-sm font-semibold bg-green-500 hover:bg-green-600 text-white shadow-sm inline-flex items-center justify-center gap-1.5 rounded-md px-3 py-2 transition-colors"
-                    >
-                      <WhatsAppIcon className="w-4 h-4" /> Book Now
-                    </a>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-
-            {filteredTests.length > 8 && !showAll && (
-              <div className="text-center mt-8">
-                <Button
-                  variant="outline"
-                  onClick={() => setShowAll(true)}
-                  className="border-clinical text-clinical hover:bg-clinical hover:text-white"
-                >
-                  View All {filteredTests.length} Tests <ChevronRight className="ml-1 w-4 h-4" />
-                </Button>
-              </div>
-            )}
-
-            {filteredTests.length === 0 && (
-              <div className="text-center py-12">
-                <Search className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-                <p className="text-gray-500">No tests found. Try a different search or category.</p>
-              </div>
-            )}
-          </>
-        )}
-      </div>
-    </section>
-  )
-}
-
 // ============ HEALTH PACKAGES ============
 function HealthPackages() {
   const [packages, setPackages] = useState([])
@@ -733,16 +579,16 @@ function HealthPackages() {
 // ============ SERVICES SECTION ============
 function ServicesSection() {
   const services = [
-    { name: 'Blood Tests', image: 'https://images.unsplash.com/photo-1631217868204-db1ed6bdd224?auto=format&fit=crop&w=600&q=80', desc: '500+ diagnostic blood tests with NABL accredited reports' },
+    { name: 'Blood Tests', image: 'https://images.unsplash.com/photo-1656337426953-554b8e5b50f5?auto=format&fit=crop&w=600&q=80', desc: '500+ diagnostic blood tests with NABL accredited reports' },
     { name: 'X-Ray', image: 'https://images.unsplash.com/photo-1758691461957-13aff0c37c6f?auto=format&fit=crop&w=600&q=80', desc: 'Digital X-ray with instant results and expert radiologist reporting' },
     { name: 'Ultrasound & Color Doppler', image: 'https://images.unsplash.com/photo-1691933880096-4046bc9e2fa0?auto=format&fit=crop&w=600&q=80', desc: 'Advanced ultrasound imaging with color Doppler technology' },
-    { name: 'ECG', image: 'https://images.unsplash.com/photo-1631558554226-fb65b25aa939?auto=format&fit=crop&w=600&q=80', desc: 'Electrocardiogram for heart rhythm and electrical activity analysis' },
-    { name: 'TMT', image: 'https://images.unsplash.com/photo-1596354762473-6706bf6d5626?auto=format&fit=crop&w=600&q=80', desc: 'Treadmill stress test for cardiac fitness and exercise tolerance' },
-    { name: 'Uroflowmetry', image: 'https://images.unsplash.com/photo-1631217868264-e5b90bb7e133?auto=format&fit=crop&w=600&q=80', desc: 'Non-invasive urine flow rate measurement for urological assessment' },
-    { name: 'Pulmonary Function Test', image: 'https://images.unsplash.com/photo-1758691461916-dc7894eb8f94?auto=format&fit=crop&w=600&q=80', desc: 'Comprehensive lung function and breathing capacity assessment' },
-    { name: 'Liver Fibroscan', image: 'https://images.unsplash.com/photo-1758691461957-474a7686e388?auto=format&fit=crop&w=600&q=80', desc: 'Non-invasive liver stiffness measurement for fibrosis detection' },
-    { name: 'NCV & EMG', image: 'https://images.pexels.com/photos/7579823/pexels-photo-7579823.jpeg?auto=compress&cs=tinysrgb&w=600', desc: 'Nerve conduction velocity and electromyography for nerve health' },
-    { name: 'EEG', image: 'https://images.unsplash.com/photo-1656337426953-554b8e5b50f5?auto=format&fit=crop&w=600&q=80', desc: 'Electroencephalogram for brain electrical activity monitoring' },
+    { name: 'ECG', image: 'https://images.unsplash.com/photo-1596354762473-6706bf6d5626?auto=format&fit=crop&w=600&q=80', desc: 'Electrocardiogram for heart rhythm and electrical activity analysis' },
+    { name: 'TMT', image: 'https://images.pexels.com/photos/4498606/pexels-photo-4498606.jpeg?auto=compress&cs=tinysrgb&w=600', desc: 'Treadmill stress test for cardiac fitness and exercise tolerance' },
+    { name: 'Uroflowmetry', image: 'https://images.pexels.com/photos/7579831/pexels-photo-7579831.jpeg?auto=compress&cs=tinysrgb&w=600', desc: 'Non-invasive urine flow rate measurement for urological assessment' },
+    { name: 'Pulmonary Function Test', image: 'https://images.pexels.com/photos/7579828/pexels-photo-7579828.jpeg?auto=compress&cs=tinysrgb&w=600', desc: 'Comprehensive lung function and breathing capacity assessment' },
+    { name: 'Liver Fibroscan', image: 'https://images.pexels.com/photos/7089020/pexels-photo-7089020.jpeg?auto=compress&cs=tinysrgb&w=600', desc: 'Non-invasive liver stiffness measurement for fibrosis detection' },
+    { name: 'NCV & EMG', image: 'https://images.pexels.com/photos/5473184/pexels-photo-5473184.jpeg?auto=compress&cs=tinysrgb&w=600', desc: 'Nerve conduction velocity and electromyography for nerve health' },
+    { name: 'EEG', image: 'https://images.unsplash.com/photo-1631217868204-db1ed6bdd224?auto=format&fit=crop&w=600&q=80', desc: 'Electroencephalogram for brain electrical activity monitoring' },
   ]
 
   return (
@@ -997,7 +843,7 @@ function WhyChooseUs() {
 // ============ LOCATIONS ============
 function LocationsSection() {
   const centers = [
-    { name: 'Greater Kailash-1', address: 'M-12, GK-1 Main Market, New Delhi', timings: 'Mon-Sat: 8AM-7PM | Sun: 8AM-5PM' },
+    { name: 'Greater Kailash-1', address: 'M-20, Greater Kailash Part-1, New Delhi', timings: 'Mon-Sat: 8AM-7PM | Sun: 8AM-5PM' },
     { name: 'Punjabi Bagh', address: 'Ring Road, Near Metro Station, New Delhi', timings: 'Mon-Sat: 8AM-7PM | Sun: 8AM-5PM' },
     { name: 'Lajpat Nagar', address: 'Central Market, Lajpat Nagar II, New Delhi', timings: 'Mon-Sat: 8AM-7PM | Sun: 8AM-5PM' },
     { name: 'Saket', address: 'J Block, Saket, Near Select City Walk, New Delhi', timings: 'Mon-Sat: 8AM-7PM | Sun: 8AM-5PM' },
@@ -1126,7 +972,18 @@ function Footer() {
               </a>
               <div className="flex items-start gap-2 text-sm text-gray-400">
                 <MapPin className="w-4 h-4 text-clinical shrink-0 mt-0.5" />
-                <span>M-12, GK-1 Main Market,<br />New Delhi - 110048</span>
+                <span>M-20, Greater Kailash Part-1,<br />New Delhi - 110048</span>
+                <a
+                  href="https://maps.app.goo.gl/iGHoRNLMN4jss5Gw5"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="shrink-0 ml-1 p-1 rounded hover:bg-gray-700 transition"
+                  title="Open in Google Maps"
+                >
+                  <svg className="w-5 h-5 text-green-400 hover:text-green-300" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                  </svg>
+                </a>
               </div>
               <div className="flex items-center gap-2 text-sm text-gray-400">
                 <Clock className="w-4 h-4 text-clinical" /> Mon-Sat: 8 AM - 7 PM | Sun: 8 AM - 5 PM
@@ -1368,7 +1225,6 @@ export default function App() {
           <HeroSection />
           <TrustBadges />
           <HealthPackages />
-          <TestCatalog />
           <ServicesSection />
           <HowItWorks />
           <PrescriptionUpload />
