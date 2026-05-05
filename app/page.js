@@ -119,9 +119,14 @@ function Header() {
               <span className="hidden sm:inline text-red-200 text-xs">Same-Day Collection</span>
             </a>
             <div className="flex items-center gap-3 text-xs">
-              <span className="hidden md:flex items-center gap-1">
-                <Truck className="w-3.5 h-3.5" /> Home Collection in Entire Delhi NCR
-              </span>
+              <a
+                href="https://maps.app.goo.gl/iGHoRNLMN4jss5Gw5"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hidden md:flex items-center gap-1 hover:text-green-200 transition"
+              >
+                <MapPin className="w-3.5 h-3.5" /> Home Collection in Entire Delhi NCR
+              </a>
               <span className="hidden md:inline text-red-200">|</span>
               <span className="flex items-center gap-1">
                 <Award className="w-3.5 h-3.5" /> NABL Accredited
@@ -921,6 +926,103 @@ function CTASection() {
   )
 }
 
+// ============ PHOTO GALLERY CAROUSEL ============
+function PhotoGallery() {
+  const [currentIndex, setCurrentIndex] = useState(0)
+
+  const photos = [
+    { src: '/gallery/biochemistry-machine.jpg', caption: 'Biochemistry Machine - Dimension RXL (Siemens)' },
+    { src: '/gallery/xray-room.jpg', caption: 'Digital X-Ray Room - Machine from Siemens' },
+    { src: '/gallery/dr-lalchandani-chamber.jpg', caption: 'Dr A Lalchandani Chamber' },
+    { src: '/gallery/immunoassay-dept.jpg', caption: 'Immunoassay & Biochemistry Department' },
+    { src: '/gallery/conference-room.jpg', caption: 'Conference Room & VIP Seating' },
+  ]
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % photos.length)
+    }, 4000)
+    return () => clearInterval(timer)
+  }, [])
+
+  const goTo = (idx) => setCurrentIndex(idx)
+  const goPrev = () => setCurrentIndex((prev) => (prev - 1 + photos.length) % photos.length)
+  const goNext = () => setCurrentIndex((prev) => (prev + 1) % photos.length)
+
+  return (
+    <section className="py-12 bg-gray-50">
+      <div className="container mx-auto px-4">
+        <div className="text-center mb-8">
+          <Badge className="bg-red-100 text-clinical hover:bg-red-100 mb-3">Our Facility</Badge>
+          <h2 className="text-3xl lg:text-4xl font-bold text-gray-900">State-of-the-Art Laboratory</h2>
+          <p className="text-gray-500 mt-2 max-w-xl mx-auto">World-class equipment from Siemens and advanced diagnostic infrastructure</p>
+        </div>
+
+        <div className="relative max-w-4xl mx-auto">
+          {/* Main Image */}
+          <div className="relative overflow-hidden rounded-2xl shadow-xl aspect-[16/9] bg-gray-200">
+            {photos.map((photo, idx) => (
+              <div
+                key={idx}
+                className={`absolute inset-0 transition-opacity duration-700 ${idx === currentIndex ? 'opacity-100' : 'opacity-0'}`}
+              >
+                <img
+                  src={photo.src}
+                  alt={photo.caption}
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-6">
+                  <p className="text-white font-semibold text-lg">{photo.caption}</p>
+                </div>
+              </div>
+            ))}
+
+            {/* Nav Arrows */}
+            <button
+              onClick={goPrev}
+              className="absolute left-3 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white text-gray-800 p-2 rounded-full shadow-lg transition z-10"
+            >
+              <ChevronRight className="w-5 h-5 rotate-180" />
+            </button>
+            <button
+              onClick={goNext}
+              className="absolute right-3 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white text-gray-800 p-2 rounded-full shadow-lg transition z-10"
+            >
+              <ChevronRight className="w-5 h-5" />
+            </button>
+          </div>
+
+          {/* Thumbnails */}
+          <div className="flex justify-center gap-2 mt-4">
+            {photos.map((photo, idx) => (
+              <button
+                key={idx}
+                onClick={() => goTo(idx)}
+                className={`w-16 h-16 rounded-lg overflow-hidden border-2 transition ${
+                  idx === currentIndex ? 'border-clinical shadow-md scale-105' : 'border-transparent opacity-60 hover:opacity-100'
+                }`}
+              >
+                <img src={photo.src} alt={photo.caption} className="w-full h-full object-cover" />
+              </button>
+            ))}
+          </div>
+
+          {/* Dots */}
+          <div className="flex justify-center gap-1.5 mt-3">
+            {photos.map((_, idx) => (
+              <button
+                key={idx}
+                onClick={() => goTo(idx)}
+                className={`w-2 h-2 rounded-full transition ${idx === currentIndex ? 'bg-clinical w-5' : 'bg-gray-300'}`}
+              />
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
+
 // ============ FOOTER ============
 function Footer() {
   return (
@@ -1231,6 +1333,7 @@ export default function App() {
           <WhyChooseUs />
           <CTASection />
         </main>
+        <PhotoGallery />
         <Footer />
         <WhatsAppButton />
         <MobileStickyBar />
