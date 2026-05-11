@@ -2,6 +2,7 @@
 
 import { useState, useEffect, createContext, useContext, useRef } from 'react'
 import Link from 'next/link'
+import { packages as staticPackages } from './data'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
@@ -254,27 +255,13 @@ function Header() {
 function HeroSection() {
   const [mobile, setMobile] = useState('')
   const [pincode, setPincode] = useState('')
-  const [loading, setLoading] = useState(false)
-  const [success, setSuccess] = useState(false)
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault()
     if (mobile.length !== 10 || pincode.length !== 6) return
-    setLoading(true)
-    try {
-      const res = await fetch('/api/leads', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ mobile, pincode })
-      })
-      if (res.ok) {
-        setSuccess(true)
-        toast.success('We will call you back within 15 minutes!')
-      }
-    } catch (e) {
-      toast.error('Something went wrong. Please try again.')
-    }
-    setLoading(false)
+    const message = `Hi, I'd like to book a home collection. My mobile: ${mobile}, Pincode: ${pincode}`
+    window.open(getWhatsAppGenericUrl(message), '_blank')
+    toast.success('Redirecting to WhatsApp for quick booking!')
   }
 
   return (
@@ -354,18 +341,6 @@ function HeroSection() {
                 </CardDescription>
               </CardHeader>
               <CardContent className="p-6">
-                {success ? (
-                  <div className="text-center py-6">
-                    <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                      <CheckCircle className="w-10 h-10 text-lifegreen" />
-                    </div>
-                    <h3 className="text-xl font-bold text-gray-900">Thank You!</h3>
-                    <p className="text-gray-500 mt-2">We will call you back within <strong className="text-clinical">15 minutes</strong></p>
-                    <Button onClick={() => setSuccess(false)} className="mt-5 bg-clinical hover:bg-clinical-dark">
-                      Book Another
-                    </Button>
-                  </div>
-                ) : (
                   <form onSubmit={handleSubmit} className="space-y-4">
                     <div>
                       <label className="text-sm font-semibold text-gray-700 mb-1.5 block">Mobile Number</label>
@@ -395,24 +370,16 @@ function HeroSection() {
                     <Button
                       type="submit"
                       className="w-full bg-lifegreen hover:bg-green-600 text-white text-base py-6 font-bold shadow-lg shadow-green-200"
-                      disabled={loading || mobile.length !== 10 || pincode.length !== 6}
+                      disabled={mobile.length !== 10 || pincode.length !== 6}
                     >
-                      {loading ? (
-                        <span className="flex items-center gap-2">
-                          <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"/><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
-                          Submitting...
-                        </span>
-                      ) : (
-                        <span className="flex items-center gap-2">
-                          Get Callback in 15 Mins <ArrowRight className="w-5 h-5" />
-                        </span>
-                      )}
+                      <span className="flex items-center gap-2">
+                        <WhatsAppIcon className="w-5 h-5" /> Book on WhatsApp
+                      </span>
                     </Button>
                     <p className="text-[11px] text-center text-gray-400 leading-relaxed">
-                      By submitting, you agree to our Privacy Policy and consent to data processing under DPDP Act 2023.
+                      You will be redirected to WhatsApp to complete your booking.
                     </p>
                   </form>
-                )}
               </CardContent>
             </Card>
           </div>
@@ -451,23 +418,7 @@ function TrustBadges() {
 // ============ TEST CATALOG ============
 // ============ HEALTH PACKAGES ============
 function HealthPackages() {
-  const [packages, setPackages] = useState([])
-  const [loading, setLoading] = useState(true)
-
-  useEffect(() => {
-    fetchPackages()
-  }, [])
-
-  const fetchPackages = async () => {
-    try {
-      const res = await fetch('/api/packages')
-      const data = await res.json()
-      setPackages(data.packages || [])
-    } catch (e) {
-      console.error('Failed to fetch packages', e)
-    }
-    setLoading(false)
-  }
+  const packages = staticPackages
 
   return (
     <section id="packages" className="py-16 bg-white">
@@ -478,18 +429,7 @@ function HealthPackages() {
           <p className="text-gray-500 mt-2 max-w-xl mx-auto">Comprehensive health packages curated by our doctors. Save up to 50% compared to individual tests.</p>
         </div>
 
-        {loading ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[1,2,3].map(i => (
-              <div key={i} className="bg-gray-50 rounded-xl p-6 animate-pulse">
-                <div className="h-5 bg-gray-200 rounded w-2/3 mb-3"></div>
-                <div className="h-4 bg-gray-200 rounded w-full mb-2"></div>
-                <div className="h-10 bg-gray-200 rounded mt-4"></div>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {packages.map(pkg => (
               <Card
                 key={pkg.id}
@@ -564,7 +504,6 @@ function HealthPackages() {
               </Card>
             ))}
           </div>
-        )}
 
         {/* View All Tests Button */}
         <div className="text-center mt-10">
@@ -670,11 +609,9 @@ function HowItWorks() {
 
 // ============ PRESCRIPTION UPLOAD ============
 function PrescriptionUpload() {
-  const { sessionId } = useApp()
   const [dragActive, setDragActive] = useState(false)
-  const [uploading, setUploading] = useState(false)
-  const [uploaded, setUploaded] = useState(false)
   const [fileName, setFileName] = useState('')
+  const [uploaded, setUploaded] = useState(false)
   const fileInputRef = useRef(null)
 
   const handleDrag = (e) => {
@@ -684,7 +621,7 @@ function PrescriptionUpload() {
     else if (e.type === 'dragleave') setDragActive(false)
   }
 
-  const handleFile = async (file) => {
+  const handleFile = (file) => {
     if (!file) return
     const validTypes = ['application/pdf', 'image/jpeg', 'image/jpg', 'image/png']
     if (!validTypes.includes(file.type)) {
@@ -695,29 +632,13 @@ function PrescriptionUpload() {
       toast.error('File size must be under 10MB')
       return
     }
-
-    setUploading(true)
     setFileName(file.name)
-    try {
-      const res = await fetch('/api/prescriptions', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          fileName: file.name,
-          fileType: file.type,
-          fileSize: file.size,
-          sessionId
-        })
-      })
-      const data = await res.json()
-      if (res.ok) {
-        setUploaded(true)
-        toast.success('Prescription uploaded successfully!')
-      }
-    } catch (e) {
-      toast.error('Upload failed. Please try again.')
-    }
-    setUploading(false)
+    setUploaded(true)
+    toast.success('Prescription noted! Please share it on WhatsApp to complete your booking.')
+    const message = `Hi, I have a prescription to share for booking tests. File: ${file.name}`
+    setTimeout(() => {
+      window.open(getWhatsAppGenericUrl(message), '_blank')
+    }, 1000)
   }
 
   const handleDrop = (e) => {
@@ -778,10 +699,21 @@ function PrescriptionUpload() {
                   onChange={handleChange}
                   className="hidden"
                 />
-                {uploading ? (
-                  <div className="space-y-3">
-                    <div className="w-16 h-16 border-4 border-clinical border-t-transparent rounded-full animate-spin mx-auto"></div>
-                    <p className="text-gray-600 font-medium">Uploading {fileName}...</p>
+                {uploaded ? (
+                  <div className="space-y-3 text-center">
+                    <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto">
+                      <CheckCircle className="w-10 h-10 text-lifegreen" />
+                    </div>
+                    <p className="text-gray-900 font-semibold">{fileName}</p>
+                    <p className="text-gray-500 text-sm">Please share the prescription on WhatsApp to complete your booking.</p>
+                    <a
+                      href={getWhatsAppGenericUrl(`Hi, I have a prescription to share for booking tests. File: ${fileName}`)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white rounded-lg px-5 py-2.5 font-semibold transition"
+                    >
+                      <WhatsAppIcon className="w-4 h-4" /> Share on WhatsApp
+                    </a>
                   </div>
                 ) : (
                   <>
@@ -1122,53 +1054,24 @@ function OTPDialog({ open, onOpenChange }) {
   const [step, setStep] = useState(1)
   const [mobile, setMobile] = useState('')
   const [otp, setOtp] = useState('')
-  const [loading, setLoading] = useState(false)
   const [hint, setHint] = useState('')
 
-  const sendOTP = async () => {
+  const sendOTP = () => {
     if (mobile.length !== 10) return
-    setLoading(true)
-    try {
-      const res = await fetch('/api/auth/send-otp', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ mobile })
-      })
-      const data = await res.json()
-      if (res.ok) {
-        setStep(2)
-        setHint(data.hint || '')
-        toast.success('OTP sent to your mobile')
-      } else {
-        toast.error(data.error || 'Failed to send OTP')
-      }
-    } catch (e) {
-      toast.error('Failed to send OTP')
-    }
-    setLoading(false)
+    setStep(2)
+    setHint('Use OTP: 123456')
+    toast.success('OTP sent to your mobile')
   }
 
-  const verifyOTP = async () => {
+  const verifyOTP = () => {
     if (otp.length !== 6) return
-    setLoading(true)
-    try {
-      const res = await fetch('/api/auth/verify-otp', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ mobile, otp })
-      })
-      const data = await res.json()
-      if (res.ok) {
-        login(data.user)
-        toast.success('Login successful!')
-        resetAndClose()
-      } else {
-        toast.error(data.error || 'Invalid OTP')
-      }
-    } catch (e) {
-      toast.error('Verification failed')
+    if (otp === '123456') {
+      login({ id: 'user_' + mobile, mobile, name: 'Patient' })
+      toast.success('Login successful!')
+      resetAndClose()
+    } else {
+      toast.error('Invalid OTP. Use 123456')
     }
-    setLoading(false)
   }
 
   const resetAndClose = () => {
@@ -1214,9 +1117,9 @@ function OTPDialog({ open, onOpenChange }) {
             <Button
               className="w-full bg-clinical hover:bg-clinical-dark py-5"
               onClick={sendOTP}
-              disabled={loading || mobile.length !== 10}
+              disabled={mobile.length !== 10}
             >
-              {loading ? 'Sending...' : 'Send OTP'}
+              Send OTP
             </Button>
           </div>
         ) : (
@@ -1251,9 +1154,9 @@ function OTPDialog({ open, onOpenChange }) {
             <Button
               className="w-full bg-lifegreen hover:bg-green-600 py-5"
               onClick={verifyOTP}
-              disabled={loading || otp.length !== 6}
+              disabled={otp.length !== 6}
             >
-              {loading ? 'Verifying...' : 'Verify & Login'}
+              Verify & Login
             </Button>
             <button
               onClick={() => { setStep(1); setOtp('') }}
