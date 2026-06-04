@@ -19,10 +19,10 @@ export const packages = [
   {
     id: "pkg-gold-health",
     name: "Gold Health Check",
-    price: 1499,
+    price: 1999,
     originalPrice: 3200,
     description: "Advanced health screening with 72 parameters for comprehensive health assessment.",
-    testsIncluded: ["CBC", "Lipid Profile", "LFT", "KFT", "Thyroid Profile", "Blood Sugar (F)", "HbA1c", "Vitamin D", "Vitamin B12", "Iron Studies"],
+    testsIncluded: ["CBC", "Liver Function Tests", "Kidney Function Tests", "Lipid Profile", "Thyroid Profile", "Sugar (F)", "HbA1c", "Vitamin D", "Vitamin B12", "Urine Routine"],
     testCount: 10,
     parameterCount: 72,
     popular: true,
