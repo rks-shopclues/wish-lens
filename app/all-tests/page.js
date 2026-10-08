@@ -120,7 +120,7 @@ export default function AllTestsPage() {
       <header className="sticky top-0 z-50 bg-white shadow-sm">
         <div className="bg-clinical text-white text-sm py-1.5">
           <div className="container mx-auto px-4 flex justify-between items-center">
-            <span className="font-medium">Dr Lalchandani Labs &bull; NABL Accredited &bull; CGHS Empanelled</span>
+            <span className="font-medium">Dr Lalchandani Labs &bull; 40 Years of Trust &bull; CGHS Empanelled</span>
             <a
               href={`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent("Hi, I want to book a test")}`}
               target="_blank"
@@ -152,7 +152,7 @@ export default function AllTestsPage() {
           <div className="text-center mb-8">
             <Badge className="bg-red-100 text-clinical hover:bg-red-100 mb-3">Complete Test Catalog</Badge>
             <h1 className="text-3xl lg:text-4xl font-bold text-gray-900">All Diagnostic Tests</h1>
-            <p className="text-gray-500 mt-2 max-w-xl mx-auto">Browse our complete range of NABL accredited diagnostic tests and imaging services</p>
+            <p className="text-gray-500 mt-2 max-w-xl mx-auto">Browse our complete range of diagnostic tests and imaging services, backed by 40 Years of Trust</p>
           </div>
 
           {/* Tabs */}
@@ -267,7 +267,7 @@ export default function AllTestsPage() {
         <div className="container mx-auto px-4">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-xs text-gray-500">
-              &copy; {new Date().getFullYear()} Dr Lalchandani Labs. All rights reserved. NABL Accredited &bull; CGHS Empanelled
+              &copy; {new Date().getFullYear()} Dr Lalchandani Labs. All rights reserved. 40 Years of Trust &bull; CGHS Empanelled
             </p>
             <Link href="/" className="text-sm text-gray-400 hover:text-white transition">
               &larr; Back to Main Website

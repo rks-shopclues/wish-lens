@@ -226,6 +226,17 @@ backend:
         comment: "✅ COMPREHENSIVE TEST PASSED: Creates booking with all patient details, confirms booking (201), returns booking ID and 'confirmed' status. Automatically clears cart after successful booking - verified cart is empty."
 
 frontend:
+  - task: "Replace accreditation wording with 40-year trust branding"
+    implemented: true
+    working: "NA"
+    file: "app/page.js, app/all-tests/page.js, app/investor-desk/page.js, app/layout.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "User approved replacing NABL Accredited (including lowercase variants) with 40 Years of Trust and standalone NABL with 40 Years Trust. Updated all 19 occurrences across four files, plus former accreditation card description. Minimal surrounding sentence adjustments preserve readability. Source search finds no remaining accreditation wording in app, public, or components; git diff --check passes. No functionality, styles, prices, CGHS branding, or WhatsApp links changed. Awaiting permission for frontend browser testing. Site is now static; legacy backend/auth test entries below are historical and not applicable."
   - task: "Hero section with lead capture form"
     implemented: true
     working: true
@@ -305,12 +316,15 @@ metadata:
   run_ui: false
 
 test_plan:
-  current_focus: []
+  current_focus:
+    - "Replace accreditation wording with 40-year trust branding"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
 
 agent_communication:
+  - agent: "main"
+    message: "Current task: copy-only trust branding replacement on the static WhatsApp website. Backend testing is not applicable; no API routes or backend code were changed. Frontend browser tests require user permission, currently pending. Once approved, verify all three pages and metadata contain no NABL text, exact replacement labels are present, CGHS branding and WhatsApp links remain unchanged, and longer labels render correctly. No credentials needed; legacy auth/backend records are historical. Do not change unrelated issues."
   - agent: "main"
     message: "Full MVP built with 8 backend API endpoints and complete frontend. All endpoints need thorough testing. Database has been seeded. The base URL is http://localhost:3000. Test all API endpoints for correct behavior, edge cases, and error handling."
   - agent: "testing"

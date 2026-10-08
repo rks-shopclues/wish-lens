@@ -65,7 +65,7 @@ export default function InvestorDeskPage() {
         <div className="bg-clinical text-white text-sm py-1.5">
           <div className="container mx-auto px-4 flex justify-between items-center">
             <span className="font-medium">Dr Lalchandani Labs &bull; BSE-SME Listed Diagnostic Company</span>
-            <span className="text-red-200 text-xs hidden sm:inline">NABL Accredited &bull; CGHS Empanelled</span>
+            <span className="text-red-200 text-xs hidden sm:inline">40 Years of Trust &bull; CGHS Empanelled</span>
           </div>
         </div>
         <div className="container mx-auto px-4 py-3">

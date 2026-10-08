@@ -130,7 +130,7 @@ function Header() {
               </a>
               <span className="hidden md:inline text-red-200">|</span>
               <span className="flex items-center gap-1">
-                <Award className="w-3.5 h-3.5" /> NABL Accredited
+                <Award className="w-3.5 h-3.5" /> 40 Years of Trust
               </span>
               <span className="text-red-200">|</span>
               <span className="flex items-center gap-1">
@@ -274,11 +274,11 @@ function HeroSection() {
         <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
           <div className="space-y-6">
             <Badge className="bg-red-100 text-clinical hover:bg-red-100 text-sm px-3 py-1.5 font-medium">
-              <Shield className="w-3.5 h-3.5 mr-1.5" /> NABL Accredited &bull; CGHS Empanelled
+              <Shield className="w-3.5 h-3.5 mr-1.5" /> 40 Years of Trust &bull; CGHS Empanelled
             </Badge>
 
             <h2 className="text-4xl lg:text-5xl xl:text-[3.5rem] font-extrabold text-gray-900 leading-[1.1] tracking-tight">
-              NABL Accredited{' '}
+              40 Years of Trust{' '}
               <br className="hidden sm:block" />
               Reports in{' '}
               <span className="text-clinical relative">
@@ -309,7 +309,7 @@ function HeroSection() {
 
             <div className="flex flex-wrap items-center gap-4 pt-2">
               {[
-                { icon: Award, label: 'NABL', color: 'text-yellow-500' },
+                { icon: Award, label: '40 Years Trust', color: 'text-yellow-500' },
                 { icon: BadgeCheck, label: 'CGHS Empanelled', color: 'text-blue-600' },
                 { icon: Shield, label: 'BSE-SME Listed', color: 'text-green-500' },
               ].map((badge, i) => (
@@ -398,7 +398,7 @@ function TrustBadges() {
           {[
             { icon: Clock, text: 'Reports in 6 Hours', color: 'text-clinical', highlight: false },
             { icon: Truck, text: 'Free Home Collection', color: 'text-lifegreen', highlight: false },
-            { icon: Award, text: 'NABL Accredited', color: 'text-yellow-600', highlight: false },
+            { icon: Award, text: '40 Years of Trust', color: 'text-yellow-600', highlight: false },
             { icon: Stethoscope, text: 'Doctor Supervised', color: 'text-red-500', highlight: false },
             { icon: BadgeCheck, text: 'CGHS Empanelled', color: 'text-blue-700', highlight: true },
           ].map((item, i) => (
@@ -523,7 +523,7 @@ function HealthPackages() {
 // ============ SERVICES SECTION ============
 function ServicesSection() {
   const services = [
-    { name: 'Blood Tests', image: 'https://images.unsplash.com/photo-1656337426953-554b8e5b50f5?auto=format&fit=crop&w=600&q=80', desc: '500+ diagnostic blood tests with NABL accredited reports' },
+    { name: 'Blood Tests', image: 'https://images.unsplash.com/photo-1656337426953-554b8e5b50f5?auto=format&fit=crop&w=600&q=80', desc: '500+ diagnostic blood tests backed by 40 Years of Trust' },
     { name: 'X-Ray', image: 'https://images.unsplash.com/photo-1758691461957-13aff0c37c6f?auto=format&fit=crop&w=600&q=80', desc: 'Digital X-ray with instant results and expert radiologist reporting' },
     { name: 'Ultrasound & Color Doppler', image: 'https://images.unsplash.com/photo-1691933880096-4046bc9e2fa0?auto=format&fit=crop&w=600&q=80', desc: 'Advanced ultrasound imaging with color Doppler technology' },
     { name: 'ECG', image: 'https://images.unsplash.com/photo-1596354762473-6706bf6d5626?auto=format&fit=crop&w=600&q=80', desc: 'Electrocardiogram for heart rhythm and electrical activity analysis' },
@@ -573,7 +573,7 @@ function HowItWorks() {
     { icon: Search, title: 'Select Test', desc: 'Choose from 500+ tests or upload a prescription', color: 'bg-red-50 text-clinical' },
     { icon: Calendar, title: 'Book Slot', desc: 'Pick your preferred date, time & collection type', color: 'bg-green-50 text-lifegreen' },
     { icon: Home, title: 'Sample Collection', desc: 'Our trained phlebotomist visits your home', color: 'bg-orange-50 text-orange-500' },
-    { icon: FileText, title: 'Get Reports', desc: 'Receive NABL accredited reports in 6 hours', color: 'bg-purple-50 text-purple-500' },
+    { icon: FileText, title: 'Get Reports', desc: 'Reports in 6 hours, backed by 40 Years of Trust', color: 'bg-purple-50 text-purple-500' },
   ]
 
   return (
@@ -743,7 +743,7 @@ function PrescriptionUpload() {
 function WhyChooseUs() {
   const features = [
     { icon: BadgeCheck, title: 'CGHS Empanelled', desc: 'Empanelled under Central Government Health Scheme. Trusted by government employees and pensioners for quality diagnostics.', color: 'bg-blue-50 text-blue-600', highlight: true },
-    { icon: Award, title: 'NABL Accredited', desc: 'Highest quality standards certified by National Accreditation Board for Testing and Calibration Laboratories.', color: 'bg-yellow-50 text-yellow-600' },
+    { icon: Award, title: '40 Years of Trust', desc: 'Four decades of clinical excellence under the direct supervision of Dr A. Lalchandani.', color: 'bg-yellow-50 text-yellow-600' },
     { icon: Clock, title: 'Reports in 6 Hours', desc: 'Fast turnaround time with real-time tracking. Most reports delivered within 6 hours of sample collection.', color: 'bg-red-50 text-clinical' },
     { icon: Stethoscope, title: 'Doctor Supervised', desc: 'Every report is verified and signed by qualified pathologists under Dr Lalchandani\'s supervision.', color: 'bg-red-50 text-red-500' },
     { icon: Truck, title: 'Free Home Collection', desc: 'Trained phlebotomists come to your doorstep. Free collection across all Delhi NCR locations.', color: 'bg-green-50 text-lifegreen' },
@@ -793,7 +793,7 @@ function LocationsSection() {
         <div className="text-center mb-10">
           <Badge className="bg-red-100 text-red-600 hover:bg-red-100 mb-3">Our Centers</Badge>
           <h2 className="text-3xl lg:text-4xl font-bold text-gray-900">Collection Centers in Delhi</h2>
-          <p className="text-gray-500 mt-2">Visit any of our 5 NABL accredited centers across New Delhi</p>
+          <p className="text-gray-500 mt-2">Visit any of our 5 centers across New Delhi, backed by 40 Years of Trust</p>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -829,7 +829,7 @@ function CTASection() {
       <div className="container mx-auto px-4 text-center">
         <h2 className="text-3xl lg:text-4xl font-bold mb-4">Ready to Book Your Health Checkup?</h2>
         <p className="text-red-100 text-lg max-w-xl mx-auto mb-8">
-          Get started with a free home sample collection. NABL accredited reports delivered in 6 hours.
+          Get started with a free home sample collection. Reports delivered in 6 hours, backed by 40 Years of Trust.
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <a href={getWhatsAppGenericUrl("Hi, I want to book a health checkup")} target="_blank" rel="noopener noreferrer">
@@ -971,11 +971,11 @@ function Footer() {
               <img src="/logo-footer.png" alt="Dr Lalchandani Labs" className="h-14 w-auto" />
             </div>
             <p className="text-sm text-gray-400 leading-relaxed mb-4">
-              NABL accredited diagnostic laboratory with 40+ years of clinical excellence. 
+              40 Years of Trust and clinical excellence in diagnostic laboratory services.
               Trusted by 20 lakh+ patients across New Delhi.
             </p>
             <div className="flex items-center gap-3">
-              <Badge className="bg-yellow-900/30 text-yellow-400 hover:bg-yellow-900/30">NABL</Badge>
+              <Badge className="bg-yellow-900/30 text-yellow-400 hover:bg-yellow-900/30">40 Years Trust</Badge>
               <Badge className="bg-red-900/30 text-red-400 hover:bg-red-900/30">CGHS</Badge>
               <Badge className="bg-green-900/30 text-green-400 hover:bg-green-900/30">BSE-SME</Badge>
             </div>
